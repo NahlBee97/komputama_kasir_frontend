@@ -1,15 +1,16 @@
 import { useQuery } from "@tanstack/react-query";
 import type { CartItem } from "../../interfaces/cartInterfaces";
 import { getUserCart } from "../../services/cartServices";
-import { MinusIcon, PlusIcon } from "../Icons";
 import Loader from "../Loader";
 import EmptyCart from "./EmptyCart";
+import QuantitySelector from "./QuantitySelector";
 
 interface CartSectionProps {
   onClickPay: () => void;
 }
 
 const CartSection = ({ onClickPay }: CartSectionProps) => {
+  
   const {
     data: cart = { items: [] },
     isLoading: cartLoading,
@@ -58,7 +59,7 @@ const CartSection = ({ onClickPay }: CartSectionProps) => {
         className="text-[#f9f906] text-[22px] font-bold leading-tight tracking-[-0.015em] px-6 pb-4 pt-6"
         style={{ textShadow: "0 0 10px rgba(249, 249, 6, 0.3)" }}
       >
-        CURRENT ORDER
+        DETAIL PESANAN
       </h2>
 
       <div className="flex-1 px-2 overflow-y-auto scrollbar-thin scrollbar-thumb-[#f9f906]/20 scrollbar-track-transparent">
@@ -83,23 +84,9 @@ const CartSection = ({ onClickPay }: CartSectionProps) => {
             </div>
 
             <div className="shrink-0 flex flex-col items-end gap-1">
-              <div className="flex items-center gap-2 text-white">
-                <button
-                  // onClick={() => updateQuantity(item.id, -1)}
-                  className="text-lg font-bold flex h-7 w-7 items-center justify-center rounded-full bg-[#11110A] hover:bg-[#f9f906] hover:text-black transition-colors duration-200"
-                >
-                  <MinusIcon />
-                </button>
-                <span className="text-base font-medium w-5 text-center text-[#f9f906]">
-                  {item.quantity}
-                </span>
-                <button
-                  // onClick={() => updateQuantity(item.id, 1)}
-                  className="text-lg font-bold flex h-7 w-7 items-center justify-center rounded-full bg-[#11110A] hover:bg-[#f9f906] hover:text-black transition-colors duration-200"
-                >
-                  <PlusIcon />
-                </button>
-              </div>
+              {/* Quantity selector */}
+              <QuantitySelector item={item} />
+
               <p className="text-white text-base font-semibold">
                 Rp.{" "}
                 {(Number(item.product.price) * item.quantity).toLocaleString(
