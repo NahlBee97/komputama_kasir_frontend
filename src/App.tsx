@@ -1,27 +1,33 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { BrowserRouter, Route, Routes } from "react-router-dom"; // Added Navigate
+import { AuthProvider } from "./components/AuthProvider";
 import Login from "./pages/Login";
-import NotFound from "./pages/NotFound";
+import ProtectedRoute from "./components/ProtectedRoute";
 import CashierLayout from "./layouts/CashierLayout";
 import Pos from "./pages/Pos";
-import { AuthProvider } from "./components/AuthProvider";
-import ProtectedRoute from "./components/ProtectedRoute";
+import NotFound from "./pages/NotFound";
+
+const queryClient = new QueryClient();
 
 const App = () => {
   return (
     <BrowserRouter>
-      <AuthProvider>
-        <Routes>
-          {/* Cashier routes */}
-          <Route path="/" element={<CashierLayout />}>
-            <Route index element={<Login />} />
-            <Route element={<ProtectedRoute />}>
-              <Route path="/pos" element={<Pos />} />
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>
+          <Routes>
+            <Route element={<CashierLayout />}>
+              <Route path="/" element={<Login />} />
+              <Route element={<ProtectedRoute />}>
+                <Route path="/pos" element={<Pos />} />
+                {/* Add other protected pages here like /inventory, /settings */}
+              </Route>
             </Route>
-          </Route>
 
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </AuthProvider>
+            {/* 404 Page */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </AuthProvider>
+      </QueryClientProvider>
     </BrowserRouter>
   );
 };
