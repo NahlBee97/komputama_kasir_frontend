@@ -1,8 +1,15 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getProducts } from "../../services/productServices";
 import { useMemo } from "react";
 import type { Product } from "../../interfaces/dataInterfaces";
 import Loader from "../Loader";
+import ProductCard from "./ProductCard";
+import { addItemToCart } from "../../services/cartServices";
+
+interface AddItemData {
+  productId: number;
+  quantity: number;
+}
 
 interface ProductSectionProps {
   activeCategory: string;
@@ -13,6 +20,9 @@ const ProductSection = ({
   activeCategory,
   searchQuery,
 }: ProductSectionProps) => {
+
+  const queryClient = useQueryClient();
+
   const {
     data: products = [],
     isLoading: productLoading,
@@ -20,6 +30,18 @@ const ProductSection = ({
   } = useQuery({
     queryKey: ["products"],
     queryFn: () => getProducts(),
+  });
+
+  const { mutate: addItem, isPending } = useMutation({
+    mutationFn: (data: AddItemData) => {
+      return addItemToCart(data.productId, data.quantity);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["cart"] });
+    },
+    onError: (error) => {
+      alert("Error: " + error);
+    },
   });
 
   // Filter items
@@ -54,25 +76,7 @@ const ProductSection = ({
     <div className="flex-1 overflow-y-auto p-6 scrollbar-thin scrollbar-thumb-[#f9f906]/20 scrollbar-track-transparent">
       <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
         {filteredItems.map((item) => (
-          <div
-            key={item.id}
-            // onClick={() => addToCart(item)}
-            className="bg-black/50 flex flex-col gap-3 rounded-lg border border-[#f9f906]/30 justify-end aspect-square p-4 cursor-pointer transition-all duration-300 hover:border-[#f9f906] hover:shadow-[0_0_15px_rgba(249,249,6,0.3)] group relative overflow-hidden"
-            style={{
-              backgroundImage: `linear-gradient(0deg, rgba(10, 10, 10, 0.9) 0%, rgba(10, 10, 10, 0) 100%), url("${item.image}")`,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-            }}
-          >
-            <div className="relative z-10">
-              <p className="text-[#f9f906] text-lg font-bold leading-tight line-clamp-2 drop-shadow-md">
-                {item.name}
-              </p>
-              <p className="text-white text-base font-medium">
-                Rp. {Number(item.price).toLocaleString("id-ID")}
-              </p>
-            </div>
-          </div>
+          <ProductCard key={item.id} item={item} disabled={isPending} onClick={() => addItem({ productId: item.id, quantity: 1 })} />
         ))}
       </div>
     </div>

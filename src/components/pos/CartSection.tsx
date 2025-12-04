@@ -47,7 +47,7 @@ const CartSection = ({ onClickPay }: CartSectionProps) => {
   if (cart.items.length === 0) {
     return (
       <div className="flex flex-col w-[35%] h-full items-center justify-center">
-        <EmptyCart/>
+        <EmptyCart />
       </div>
     );
   }
@@ -77,7 +77,7 @@ const CartSection = ({ onClickPay }: CartSectionProps) => {
                   {item.product.name}
                 </p>
                 <p className="text-white/70 text-sm font-normal leading-normal">
-                  ${item.product.price.toFixed(2)}
+                  Rp. {Number(item.product.price).toLocaleString("id-ID")}
                 </p>
               </div>
             </div>
@@ -101,7 +101,10 @@ const CartSection = ({ onClickPay }: CartSectionProps) => {
                 </button>
               </div>
               <p className="text-white text-base font-semibold">
-                ${(item.product.price * item.quantity).toFixed(2)}
+                Rp.{" "}
+                {(Number(item.product.price) * item.quantity).toLocaleString(
+                  "id-ID"
+                )}
               </p>
             </div>
           </div>
@@ -115,14 +118,11 @@ const CartSection = ({ onClickPay }: CartSectionProps) => {
 
       {/* Footer Section */}
       <div className="p-6 border-t border-t-[#f9f906]/20 mt-auto bg-[#23230f]">
-        <div className="flex flex-col gap-3 text-base">
-          <div className="w-full h-px bg-[#f9f906]/20 my-2"></div>
-          <div className="flex justify-between items-center">
-            <p className="text-[#f9f906] font-bold text-xl">Total</p>
-            <p className="text-[#f9f906] font-bold text-xl">
-              ${total.toFixed(2)}
-            </p>
-          </div>
+        <div className="flex justify-between items-center">
+          <p className="text-[#f9f906] font-bold text-xl">Total</p>
+          <p className="text-[#f9f906] font-bold text-xl">
+            Rp. {total.toLocaleString("id-ID")}
+          </p>
         </div>
         <button
           onClick={onClickPay}
