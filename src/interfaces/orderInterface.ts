@@ -1,3 +1,24 @@
+import type { OrderStatus, Product } from "./dataInterfaces";
+
+export interface Order {
+  id: number;
+  userId: number;
+  totalAmount: number;
+  paymentCash: number;
+  paymentChange: number;
+  status: OrderStatus;
+  items: OrderItem[];
+}
+
+export interface OrderItem {
+  id: number;
+  quantity: number;
+  unitPrice: number;
+  orderId: number;
+  productId: number;
+  product?: Product;
+}
+
 export interface NewOrder {
   userId: number;
   totalAmount: number;

@@ -85,6 +85,8 @@ const Pos = () => {
 
         {/* --- Right Column (Cart) --- */}
         <CartSection />
+
+        
       </div>
     </div>
   );

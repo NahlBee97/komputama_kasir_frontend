@@ -4,14 +4,27 @@ import { getUserCart } from "../../services/cartServices";
 import Loader from "../Loader";
 import EmptyCart from "./EmptyCart";
 import QuantitySelector from "./QuantitySelector";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PaymentModal from "./FinalizePayment";
 import { createOrder } from "../../services/orderServices";
-import type { NewOrder } from "../../interfaces/orderInterface";
+import type { NewOrder, OrderItem } from "../../interfaces/orderInterface";
+import { Receipt } from "./Receipt";
 
 const CartSection = () => {
   const queryClient = useQueryClient();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  // eslint-disable-next-line
+  const [receiptData , setReceiptData] = useState<{order: any; orderItems: OrderItem[]}>({order: {}, orderItems: []});
+
+  useEffect(() => {
+    // Check if receiptData has valid order info inside it
+    if (receiptData && receiptData.order && receiptData.order.id) {
+      // Small timeout ensures React has finished rendering the <Receipt> DOM
+      setTimeout(() => {
+        window.print();
+      }, 100);
+    }
+  }, [receiptData]);
 
   const {
     data: cart = { items: [] },
@@ -24,7 +37,8 @@ const CartSection = () => {
 
   const { mutate: checkout, isPending } = useMutation({
     mutationKey: ["checkout"],
-    onSuccess: () => {
+    onSuccess: (data) => {
+      setReceiptData(data);
       queryClient.invalidateQueries({ queryKey: ["cart"] });
     },
     mutationFn: async (orderData: NewOrder) => {
@@ -53,7 +67,6 @@ const CartSection = () => {
       };
 
       checkout(orderData);
-      alert("Order created successfully!");
     } catch (error) {
       console.error("Payment confirmation error:", error);
     } finally {
@@ -158,6 +171,7 @@ const CartSection = () => {
         total={total}
         onConfirm={handleConfirmPayment}
       />
+      <Receipt data={receiptData}/>
     </div>
   );
 };

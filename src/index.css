@@ -1,1 +1,42 @@
 @import "tailwindcss";
+
+/* --- PRINT STYLES --- */
+@media print {
+  /* 1. CRITICAL FIX: Lock the body so invisible items don't take space */
+  html, body {
+    height: 100vh; 
+    margin: 0 !important; 
+    padding: 0 !important; 
+    overflow: hidden !important; /* Cuts off any content spilling to page 2 */
+  }
+
+  /* 2. Hide everything and COLLAPSE their height */
+  body * {
+    visibility: hidden;
+    height: 0; /* This ensures hidden elements don't push the page length */
+  }
+
+  /* 3. Bring the receipt back to life */
+  #printable-receipt, 
+  #printable-receipt * {
+    visibility: visible;
+    height: auto; /* Restore natural height for the receipt */
+    overflow: visible; /* Allow receipt content to show */
+  }
+
+  /* 4. Position: Fixed often works better than Absolute to snap to top-left */
+  #printable-receipt {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 58mm; /* Keep this if you are using narrow paper */
+    margin: 5mm; /* Add margin to avoid cutting off edges */
+    padding: 0; /* Remove padding here, handle it inside the component */
+  }
+
+  /* 5. Page setup */
+  @page {
+    size: auto;
+    margin: 0mm; 
+  }
+}
