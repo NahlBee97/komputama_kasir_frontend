@@ -6,6 +6,8 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import CashierLayout from "./layouts/CashierLayout";
 import Pos from "./pages/Pos";
 import NotFound from "./pages/NotFound";
+import AdminLayout from "./layouts/AdminLayout";
+import Dashboard from "./pages/admin/Dashboard";
 
 const queryClient = new QueryClient();
 
@@ -19,7 +21,12 @@ const App = () => {
               <Route path="/" element={<Login />} />
               <Route element={<ProtectedRoute />}>
                 <Route path="/pos" element={<Pos />} />
-                {/* Add other protected pages here like /inventory, /settings */}
+              </Route>
+            </Route>
+
+            <Route element={<AdminLayout />}>
+              <Route element={<ProtectedRoute />}>
+                <Route path="/admin" element={<Dashboard />} />
               </Route>
             </Route>
 

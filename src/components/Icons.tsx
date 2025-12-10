@@ -89,3 +89,140 @@ export const MinusIcon = () => (
     <path d="M5 12h14" />
   </svg>
 );
+
+export const StorefrontIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="currentColor"
+    className="w-6 h-6"
+  >
+    <path d="M13.818 16.697a2.182 2.182 0 0 1-4.364 0 1.091 1.091 0 0 0-1.09-1.09H6.18c-.6 0-1.091.49-1.091 1.09 0 1.206 1.092 2.182 2.182 2.182.936 0 1.728-.621 1.955-1.427.35.805 1.142 1.427 2.045 1.427s1.695-.622 2.045-1.427c.228.806 1.02 1.427 1.955 1.427 1.206 0 2.182-.976 2.182-2.182 0-.6-.491-1.09-1.091-1.09h-2.182c-.6 0-1.09.49-1.09 1.09v.003Zm-4.363 0h.001v-.001h-.001v.001Zm4.363 0h.001v-.001h-.001v.001ZM5.523 4.266a2.182 2.182 0 0 0-2.08 1.543l-1.222 3.97a1.091 1.091 0 0 0 1.042 1.411h17.472a1.091 1.091 0 0 0 1.043-1.41l-1.223-3.972a2.182 2.182 0 0 0-2.08-1.542H5.523Z" />
+    <path d="M4 19.97c0 .602.489 1.09 1.091 1.09h13.09c.603 0 1.092-.488 1.092-1.09V13.42c-.287.135-.603.214-.935.214-1.206 0-2.182-.976-2.182-2.181 0-.17.026-.334.066-.491h-1.221c.04.157.065.321.065.49 0 1.206-.977 2.182-2.182 2.182s-2.182-.976-2.182-2.182c0-.169.025-.333.065-.49H8.625c.041.157.066.321.066.49 0 1.206-.976 2.182-2.182 2.182-.332 0-.648-.079-.935-.214v6.548Z" />
+  </svg>
+);
+
+export const DashboardIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="currentColor"
+    className="w-6 h-6"
+  >
+    <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z" />
+  </svg>
+);
+
+export const InventoryIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className="w-6 h-6"
+  >
+    <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" />
+    <path d="m3.3 7 8.7 5 8.7-5" />
+    <path d="M12 22V12" />
+  </svg>
+);
+
+export const ReceiptIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className="w-6 h-6"
+  >
+    <path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z" />
+    <path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8" />
+    <path d="M12 17V7" />
+  </svg>
+);
+
+export const AssessmentIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className="w-6 h-6"
+  >
+    <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+    <line x1="16" y1="2" x2="16" y2="6" />
+    <line x1="8" y1="2" x2="8" y2="6" />
+    <line x1="3" y1="10" x2="21" y2="10" />
+    <path d="M8 14h.01" />
+    <path d="M12 14h.01" />
+    <path d="M16 14h.01" />
+    <path d="M8 18h.01" />
+    <path d="M12 18h.01" />
+    <path d="M16 18h.01" />
+  </svg>
+);
+
+export const LogoutIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className="w-6 h-6"
+  >
+    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+    <polyline points="16 17 21 12 16 7" />
+    <line x1="21" y1="12" x2="9" y2="12" />
+  </svg>
+);
+
+export const WarningIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="currentColor"
+    className="w-5 h-5 text-yellow-400"
+  >
+    <path d="M12 2L1 21h22L12 2zm1 17h-2v-2h2v2zm0-4h-2v-6h2v6z" />
+  </svg>
+);
+
+export const ErrorIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="currentColor"
+    className="w-5 h-5 text-red-500"
+  >
+    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
+  </svg>
+);
+

@@ -9,3 +9,13 @@ export async function createOrder(orderData: NewOrder) {
     console.error("Error creating order:", error);
   }
 }
+
+export async function getTodayOrders() {
+  try {
+    const response = await api.get("/api/orders/today");
+    return response.data.orders;
+  } catch (error) {
+    console.error("Error creating order:", error);
+  }
+}
+

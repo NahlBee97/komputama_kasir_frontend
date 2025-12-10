@@ -22,6 +22,7 @@ export interface Order {
   totalAmount: number;
   paymentCash: number;
   paymentChange: number;
+  items: OrderItem[];
   status: OrderStatus;
 }
 

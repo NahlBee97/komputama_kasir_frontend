@@ -1,5 +1,6 @@
 import { forwardRef } from "react";
 import type { OrderItem } from "../../interfaces/dataInterfaces";
+import { formatCurrency } from "../../helper/formatCurrentcy";
 
 interface ReceiptProps {
   // eslint-disable-next-line
@@ -8,15 +9,6 @@ interface ReceiptProps {
 
 export const Receipt = forwardRef<HTMLDivElement, ReceiptProps>(
   ({ data }, ref) => {
-    // Helper to format currency (IDR)
-    const formatCurrency = (val: number) => {
-      return new Intl.NumberFormat("id-ID", {
-        style: "currency",
-        currency: "IDR",
-        minimumFractionDigits: 0,
-      }).format(val);
-    };
-
     return (
       // This div is hidden on screen, but we will target it in print CSS
       <div
