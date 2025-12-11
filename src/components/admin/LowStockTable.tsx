@@ -1,4 +1,4 @@
-import type { Product } from "../../interfaces/dataInterfaces";
+import type { Product } from "../../interfaces/authInterfaces";
 import { GLOW_BORDER } from "../../pages/admin/Dashboard";
 import { ErrorIcon, WarningIcon } from "../Icons";
 

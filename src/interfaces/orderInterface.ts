@@ -1,4 +1,5 @@
-import type { OrderStatus, Product } from "./dataInterfaces";
+import type { OrderStatus } from "./authInterfaces";
+import type { Product } from "./productInterfaces";
 
 export interface Order {
   id: number;
@@ -8,6 +9,7 @@ export interface Order {
   paymentChange: number;
   status: OrderStatus;
   items: OrderItem[];
+  createdAt: Date;
 }
 
 export interface OrderItem {

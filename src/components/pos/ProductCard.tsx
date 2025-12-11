@@ -1,4 +1,4 @@
-import type { Product } from "../../interfaces/dataInterfaces";
+import type { Product } from "../../interfaces/authInterfaces";
 
 interface ProductCardProps {
   item: Product;
@@ -28,6 +28,6 @@ const ProductCard = ({ item, onClick, disabled }: ProductCardProps) => {
       </div>
     </div>
   );
-}
+};
 
-export default ProductCard
+export default ProductCard;

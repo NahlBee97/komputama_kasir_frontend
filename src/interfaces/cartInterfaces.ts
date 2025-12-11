@@ -1,4 +1,4 @@
-import type { Product } from "./dataInterfaces";
+import type { Product } from "./authInterfaces";
 
 export interface Cart {
   id: number;

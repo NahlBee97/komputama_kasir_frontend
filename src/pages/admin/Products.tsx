@@ -9,11 +9,11 @@ import {
 
 import { GLOW_BORDER, GLOW_TEXT } from "./Dashboard";
 import { deleteProduct, getProducts } from "../../services/productServices";
-import type { Product } from "../../interfaces/dataInterfaces";
 import { formatCurrency } from "../../helper/formatCurrentcy";
 import Loader from "../../components/Loader";
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import type { Product } from "../../interfaces/productInterfaces";
 
 const Products = () => {
   const navigate = useNavigate();
@@ -147,7 +147,8 @@ const Products = () => {
                       className="border-b border-[#f9f906]/10 last:border-none hover:bg-white/5 transition-colors"
                     >
                       <td className="p-4 text-sm text-white/90">
-                        <img className="w-10 h-10 rounded-sm"
+                        <img
+                          className="w-10 h-10 rounded-sm"
                           src=""
                           alt="product image"
                         />

@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getProducts } from "../../services/productServices";
 import { useMemo } from "react";
-import type { Product } from "../../interfaces/dataInterfaces";
+import type { Product } from "../../interfaces/authInterfaces";
 import Loader from "../Loader";
 import ProductCard from "./ProductCard";
 import { addItemToCart } from "../../services/cartServices";
@@ -20,7 +20,6 @@ const ProductSection = ({
   activeCategory,
   searchQuery,
 }: ProductSectionProps) => {
-
   const queryClient = useQueryClient();
 
   const {
@@ -76,7 +75,12 @@ const ProductSection = ({
     <div className="flex-1 overflow-y-auto p-6 scrollbar-thin scrollbar-thumb-[#f9f906]/20 scrollbar-track-transparent">
       <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
         {filteredItems.map((item) => (
-          <ProductCard key={item.id} item={item} disabled={isPending} onClick={() => addItem({ productId: item.id, quantity: 1 })} />
+          <ProductCard
+            key={item.id}
+            item={item}
+            disabled={isPending}
+            onClick={() => addItem({ productId: item.id, quantity: 1 })}
+          />
         ))}
       </div>
     </div>

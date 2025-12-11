@@ -1,5 +1,5 @@
 import { forwardRef } from "react";
-import type { OrderItem } from "../../interfaces/dataInterfaces";
+import type { OrderItem } from "../../interfaces/authInterfaces";
 import { formatCurrency } from "../../helper/formatCurrentcy";
 
 interface ReceiptProps {
@@ -38,9 +38,9 @@ export const Receipt = forwardRef<HTMLDivElement, ReceiptProps>(
         {/* Items */}
         <div className="mb-2 text-[10px]">
           {data.orderItems.map((item: OrderItem) => (
-            <div  className="flex justify-between mb-1">
+            <div className="flex justify-between mb-1">
               <span>
-               "{item.product.name} x {item.quantity}"
+                "{item.product.name} x {item.quantity}"
               </span>
               <span>{formatCurrency(item.product.price * item.quantity)}</span>
             </div>
