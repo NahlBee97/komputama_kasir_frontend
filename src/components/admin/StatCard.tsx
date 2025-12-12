@@ -1,14 +1,17 @@
+import { formatCurrency } from "../../helper/formatCurrentcy";
 import { GLOW_BORDER, GLOW_TEXT } from "../../pages/admin/Dashboard";
 import Loader from "../Loader";
 
-const StatsCard = ({
+const StatCard = ({
   title,
   value,
+  isCurrency = false,
   isLoading,
   isError,
 }: {
   title: string;
   value: string | number;
+  isCurrency?: boolean
   isLoading: boolean;
   isError: boolean
 }) => (
@@ -34,7 +37,7 @@ const StatsCard = ({
           className="text-[#f9f906] tracking-light text-4xl font-bold leading-tight"
           style={{ textShadow: GLOW_TEXT }}
         >
-          {value}
+          {isCurrency ? formatCurrency(value as number) : value}
         </p>
       </>
     )}
@@ -43,4 +46,4 @@ const StatsCard = ({
   </div>
 );
 
-export default StatsCard;
+export default StatCard;

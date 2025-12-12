@@ -4,6 +4,7 @@ export interface Product {
   category: string;
   price: number; // Prisma Decimal is usually handled as number or string in TS
   stock: number;
+  sale: number;
   image: string | null; // Nullable because of String?
   isActive: boolean;
 }

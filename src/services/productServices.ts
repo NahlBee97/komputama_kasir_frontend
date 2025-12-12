@@ -11,6 +11,16 @@ export async function getProducts() {
   }
 }
 
+export async function getTopProducts() {
+  try {
+    const response = await api.get("/api/products/top");
+
+    return response.data.products;
+  } catch (error) {
+    console.error("Error fetching products:", error);
+  }
+}
+
 export async function getProductById(id: number) {
   try {
     const response = await api.get(`/api/products/${id}`);

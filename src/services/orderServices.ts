@@ -28,3 +28,12 @@ export async function getOrders() {
   }
 }
 
+export async function getOrderSummary() {
+  try {
+    const response = await api.get("/api/orders/summary");
+    return response.data.summary;
+  } catch (error) {
+    console.error("Error get order summary:", error);
+  }
+}
+
