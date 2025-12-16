@@ -1,8 +1,6 @@
 import api from "../lib/axios";
 
-export const getProducts = async (
-  page: number = 1,
-) => {
+export const getProducts = async (page: number = 1) => {
   try {
     const response = await api.get("/api/products", {
       params: {
@@ -17,17 +15,22 @@ export const getProducts = async (
   }
 };
 
-export const getTopProducts = async (
-  start: string,
-  end: string
-) => {
+export const getLowStockProducts = async () => {
   try {
-    const response = await api.get(
-      "/api/products/top",
-      {
-        params: { start, end },
-      }
-    );
+    const response = await api.get("/api/products/low");
+
+    return response.data.products;
+  } catch (error) {
+    console.error("Error get low stock products:", error);
+    throw new Error("Failed to fetch products.");
+  }
+};
+
+export const getTopProducts = async (start: string, end: string) => {
+  try {
+    const response = await api.get("/api/products/top", {
+      params: { start, end },
+    });
     return response.data.products;
   } catch (error) {
     console.error("Error fetching top products:", error);
@@ -68,7 +71,6 @@ export async function updateProduct(id: number, data: FormData) {
 export async function deleteProduct(id: number) {
   try {
     await api.delete(`/api/products/${id}`);
-
   } catch (error) {
     console.error("Error updating product:", error);
   }

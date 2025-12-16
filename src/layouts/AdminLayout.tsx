@@ -1,27 +1,27 @@
-// import { useEffect } from "react";
 import { Outlet } from "react-router-dom";
-import Footer from "../components/Footer";
 import Sidebar from "../components/admin/Sidebar";
+import Footer from "../components/Footer";
 
 const AdminLayout = () => {
   return (
     <div
-      className="flex min-h-screen min-w-screen flex-col bg-black text-[#f9f906] overflow-x-hidden font-sans"
+      className="flex h-screen w-screen bg-black text-[#f9f906] overflow-hidden font-sans"
       style={{
         backgroundImage: `radial-gradient(circle at center, #23230f 0%, #000000 70%)`,
       }}
     >
-      <div className="flex">
-        <div>
-          <Sidebar />
-        </div>
-        <main className="container mx-auto">
-          <Outlet />
-        </main>
+      <div className="shrink-0">
+        <Sidebar />
       </div>
-      <Footer />
+
+      <main className="flex-1 flex flex-col overflow-y-auto">
+        <div className="p-6">
+          <Outlet />
+        </div>
+        <Footer />
+      </main>
     </div>
   );
 };
 
-export default AdminLayout;
+export default AdminLayout; 

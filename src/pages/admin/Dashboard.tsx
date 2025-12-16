@@ -3,9 +3,8 @@ import LowStockTable from "../../components/admin/LowStockTable";
 import StatsCard from "../../components/admin/StatCard";
 import { getTodayOrders } from "../../services/orderServices";
 import { formatCurrency } from "../../helper/formatCurrentcy";
-import { getProducts } from "../../services/productServices";
+import { getLowStockProducts } from "../../services/productServices";
 import type { Order } from "../../interfaces/orderInterface";
-import type { Product } from "../../interfaces/productInterfaces";
 
 export const GLOW_BORDER = "0 0 1px #f9f906, 0 0 4px #f9f906, 0 0 8px #f9f906";
 export const GLOW_TEXT = "0 0 2px #f9f906, 0 0 5px #f9f906";
@@ -25,8 +24,8 @@ const Dashboard = () => {
     isLoading: isProductsLoading,
     error: productsError,
   } = useQuery({
-    queryKey: ["products"],
-    queryFn: () => getProducts(),
+    queryKey: ["lowStockProducts"],
+    queryFn: () => getLowStockProducts(),
   });
 
   // order summaries
@@ -38,11 +37,6 @@ const Dashboard = () => {
     (acc: number, order: Order) =>
       acc + order.items.reduce((itemAcc, item) => itemAcc + item.quantity, 0),
     0
-  );
-
-  // product summaries
-  const lowStockProducts = products.filter(
-    (product: Product) => product.stock < 10
   );
 
   return (
@@ -88,7 +82,7 @@ const Dashboard = () => {
           >
             LOW STOCK ALERTS
           </h2>
-          <LowStockTable data={lowStockProducts} isLoading={isProductsLoading} isError={!!productsError} />
+          <LowStockTable data={products} isLoading={isProductsLoading} isError={!!productsError} />
         </div>
       </div>
     </main>
