@@ -40,7 +40,11 @@ const Products = () => {
   });
 
   // Extract products and pagination metadata
-  const products: Product[] = queryResult?.products || [];
+  const products: Product[] = useMemo(
+    () => queryResult?.products || [],
+    [queryResult]
+  );
+
   const totalPages: number = queryResult?.totalPages || 1;
   const currentPage: number = queryResult?.currentPage || 1;
 
@@ -127,28 +131,28 @@ const Products = () => {
               {/* Table Headers remain the same */}
               {!productError && !isProductLoading && (
                 <tr>
-                  <th className="p-4 text-sm font-semibold uppercase text-[#f9f906]/70">
+                  <th className="py-4 px-2 text-sm font-semibold uppercase text-[#f9f906]/70">
                     # ID
                   </th>
-                  <th className="p-4 text-sm font-semibold uppercase text-[#f9f906]/70">
+                  <th className="py-4 px-2 text-sm font-semibold uppercase text-[#f9f906]/70">
                     Gambar
                   </th>
-                  <th className="p-4 text-sm font-semibold uppercase text-[#f9f906]/70">
+                  <th className="py-4 px-2 text-sm font-semibold uppercase text-[#f9f906]/70">
                     Nama
                   </th>
-                  <th className="p-4 text-sm font-semibold uppercase text-[#f9f906]/70">
+                  <th className="py-4 px-2 text-sm font-semibold uppercase text-[#f9f906]/70">
                     Kategori
                   </th>
-                  <th className="p-4 text-sm font-semibold uppercase text-[#f9f906]/70 text-right">
+                  <th className="py-4 px-2 text-sm font-semibold uppercase text-[#f9f906]/70 text-right">
                     Harga
                   </th>
-                  <th className="p-4 text-sm font-semibold uppercase text-[#f9f906]/70 text-right">
+                  <th className="py-4 px-2 text-sm font-semibold uppercase text-[#f9f906]/70 text-right">
                     Stok
                   </th>
-                  <th className="p-4 text-sm font-semibold uppercase text-[#f9f906]/70 text-center">
+                  <th className="py-4 px-2 text-sm font-semibold uppercase text-[#f9f906]/70 text-center">
                     Status
                   </th>
-                  <th className="p-4 text-sm font-semibold uppercase text-[#f9f906]/70 text-center">
+                  <th className="py-4 px-2 text-sm font-semibold uppercase text-[#f9f906]/70 text-center">
                     Tindakan
                   </th>
                 </tr>
@@ -159,7 +163,7 @@ const Products = () => {
                 // Loading/Error state inside the table body
                 <tr>
                   <td colSpan={8} className="p-10 text-center">
-                    <div className="flex flex-col gap-3 justify-center items-center">
+                    <div className="flex flex-col h-80 gap-3 justify-center items-center">
                       {productError ? <WarningIcon /> : <Loader size="md" />}
                       <p className="text-white">
                         {productError
@@ -175,7 +179,7 @@ const Products = () => {
                     colSpan={8}
                     className="p-10 text-center text-[#f9f906]/70"
                   >
-                    No products found for the current page/search criteria.
+                    Produk tidak ditemukan
                   </td>
                 </tr>
               ) : (
@@ -213,9 +217,9 @@ const Products = () => {
                           status={
                             product.stock < 10
                               ? product.stock === 0
-                                ? "Out Of Stock"
-                                : "Low Stock"
-                              : "In Stock"
+                                ? "Habis"
+                                : "Rendah"
+                              : "Cukup"
                           }
                         />
                       </td>

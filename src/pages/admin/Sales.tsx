@@ -1,5 +1,5 @@
 import SaleCard from "../../components/admin/SaleCard";
-import { SearchIcon } from "../../components/Icons";
+import { SearchIcon, WarningIcon } from "../../components/Icons";
 import { useQuery } from "@tanstack/react-query";
 import { getOrders } from "../../services/orderServices";
 import type { Order } from "../../interfaces/orderInterface";
@@ -41,7 +41,7 @@ const Sales = () => {
 
   // Destructure orders and totals from the query result
   const orders = useMemo(() => queryResult?.orders || [], [queryResult]);
-  
+
   const totalPages = queryResult?.totalPages || 1;
   const currentPage = queryResult?.currentPage || 1;
 
@@ -144,9 +144,12 @@ const Sales = () => {
                   <SaleCard key={order.id} order={order} />
                 ))
               ) : (
-                <p className="text-center text-[#f9f906]/70 mt-10">
-                  No sales found for the selected criteria.
-                </p>
+                <div className="h-80 flex flex-col justify-center items-center gap-2">
+                  <WarningIcon />
+                  <p className="text-center text-[#f9f906]/70">
+                    Riwayat Penjualan Tidak Ditemukan.
+                  </p>
+                </div>
               )}
             </div>
 

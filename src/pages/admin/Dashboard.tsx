@@ -82,7 +82,7 @@ const Dashboard = () => {
           >
             PRODUK STOK RENDAH
           </h2>
-          <LowStockTable data={products} isLoading={isProductsLoading} isError={!!productsError} />
+          <LowStockTable products={products} isLoading={isProductsLoading} isError={!!productsError} />
         </div>
       </div>
     </main>

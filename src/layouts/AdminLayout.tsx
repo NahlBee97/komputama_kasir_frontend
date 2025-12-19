@@ -14,14 +14,16 @@ const AdminLayout = () => {
         <Sidebar />
       </div>
 
-      <main className="flex-1 flex flex-col overflow-y-auto">
-        <div className="px-6">
+      <main className="flex-1 flex flex-col justify-between min-h-screen overflow-y-auto">
+        <div className="px-4">
           <Outlet />
         </div>
-        <Footer />
+        <div>
+          <Footer />
+        </div>
       </main>
     </div>
   );
 };
 
-export default AdminLayout; 
+export default AdminLayout;

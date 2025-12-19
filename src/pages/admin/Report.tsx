@@ -1,14 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import StatCard from "../../components/admin/StatCard";
-import { WarningIcon } from "../../components/Icons";
 import { getTopProducts } from "../../services/productServices"; // Needs updating
-import type { Product } from "../../interfaces/productInterfaces";
-import { formatCurrency } from "../../helper/formatCurrentcy";
 import { getOrderSummary } from "../../services/orderServices"; // Needs updating
-import Loader from "../../components/Loader";
 import { useState } from "react"; // Import useState
+import TopSelling from "../../components/report/TopSelling";
 
-const GLOW_BORDER = "0 0 1px #f9f906, 0 0 4px #f9f906, 0 0 8px #f9f906";
 const GLOW_TEXT = "0 0 2px #f9f906, 0 0 5px #f9f906";
 
 interface OrderSummary {
@@ -169,77 +165,11 @@ const Report = () => {
           >
             PRODUK TERLARIS
           </h2>
-          <div
-            className="mt-4 overflow-hidden rounded-xl border border-[#f9f906]/50 bg-[#0A0A0A]"
-            style={{ boxShadow: GLOW_BORDER }}
-          >
-            <div className="overflow-x-auto">
-              <table className="w-full text-left">
-                <thead className="border-b border-[#f9f906]/20">
-                  {!isTopProductsLoading && !topProductsError && (
-                    <tr>
-                      <th className="p-4 text-sm font-semibold uppercase text-[#f9f906]/70">
-                        # ID
-                      </th>
-                      <th className="p-4 text-sm font-semibold uppercase text-[#f9f906]/70">
-                        Nama
-                      </th>
-                      <th className="p-4 text-sm font-semibold uppercase text-[#f9f906]/70 text-right">
-                        Jumlah Terjual
-                      </th>
-                      <th className="p-4 text-sm font-semibold uppercase text-[#f9f906]/70 text-right">
-                        Total Omset
-                      </th>
-                    </tr>
-                  )}
-                </thead>
-                <tbody>
-                  {isTopProductsLoading || topProductsError ? (
-                    <tr>
-                      <td colSpan={3} className="p-10 text-center">
-                        <div className="w-full flex flex-col gap-1 justify-center items-center">
-                          {topProductsError ? (
-                            <WarningIcon />
-                          ) : (
-                            <Loader size="md" />
-                          )}
-                          <p className="text-white">
-                            {topProductsError
-                              ? "Error Loading Products"
-                              : "Loading Products..."}
-                          </p>
-                        </div>
-                      </td>
-                    </tr>
-                  ) : (
-                    <>
-                      {topProducts.map((product: Product) => (
-                        <tr
-                          key={product.id}
-                          className="border-b border-[#f9f906]/10 last:border-none hover:bg-white/5 transition-colors"
-                        >
-                          <td className="p-4 text-sm text-white/90">
-                            {product.id}
-                          </td>
-                          <td className="p-4 text-sm text-white/90">
-                            {product.name}
-                          </td>
-                          {/* Assuming the service returns the units sold in a property, e.g., 'unitsSold' */}
-                          <td className="p-4 text-sm text-white/90 text-right">
-                            {product.sale || "N/A"}
-                          </td>
-                          {/* Assuming the service returns the calculated total revenue */}
-                          <td className="p-4 text-sm text-white/90 text-right">
-                            {formatCurrency(product.sale * product.price)}
-                          </td>
-                        </tr>
-                      ))}
-                    </>
-                  )}
-                </tbody>
-              </table>
-            </div>
-          </div>
+          <TopSelling
+            products={topProducts}
+            isLoading={isTopProductsLoading}
+            isError={!!topProductsError}
+          />
         </div>
       </div>
     </main>
