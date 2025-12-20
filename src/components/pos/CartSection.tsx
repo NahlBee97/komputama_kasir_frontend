@@ -9,14 +9,19 @@ import PaymentModal from "./FinalizePayment";
 import { createOrder } from "../../services/orderServices";
 import type { NewOrder, OrderItem } from "../../interfaces/orderInterface";
 import { Receipt } from "./Receipt";
-import { apiUrl } from "../../config";
 import { formatCurrency } from "../../helper/formatCurrentcy";
+import { WarningIcon } from "../Icons";
+import CartItemCard from "./CartItemCard";
 
 const CartSection = () => {
   const queryClient = useQueryClient();
+  
   const [isModalOpen, setIsModalOpen] = useState(false);
-  // eslint-disable-next-line
-  const [receiptData , setReceiptData] = useState<{order: any; orderItems: OrderItem[]}>({order: {}, orderItems: []});
+  const [receiptData, setReceiptData] = useState<{
+    // eslint-disable-next-line
+    order: any;
+    orderItems: OrderItem[];
+  }>({ order: {}, orderItems: [] });
 
   useEffect(() => {
     // Check if receiptData has valid order info inside it
@@ -30,7 +35,7 @@ const CartSection = () => {
 
   const {
     data: cart = { items: [] },
-    isLoading: cartLoading,
+    isLoading: isCartLoading,
     error: cartError,
   } = useQuery({
     queryKey: ["cart"],
@@ -76,19 +81,13 @@ const CartSection = () => {
     }
   };
 
-  if (cartLoading) {
+  if (isCartLoading || cartError) {
     return (
-      <div className="flex flex-col gap-2 w-[35%] h-full bg-[#23230f] items-center justify-center">
-        <Loader size="lg" variant="primary" />
-        <h3 className="text-[#f9f906]">Memuat Keranjang...</h3>
-      </div>
-    );
-  }
-
-  if (cartError) {
-    return (
-      <div className="flex flex-col text-[#f9f906] w-[35%] h-full bg-[#23230f] items-center justify-center">
-        Gangguan Memuat Keranjang.
+      <div className="flex flex-col gap-2 w-full h-full items-center justify-center">
+        {cartError ? <WarningIcon /> : <Loader size="lg" variant="primary" />}
+        <h3 className="text-[#f9f906]">
+          {cartError ? "Gangguan Memuat Keranjang..." : "Memuat Keranjang..."}
+        </h3>
       </div>
     );
   }
@@ -116,27 +115,14 @@ const CartSection = () => {
             key={item.id}
             className="flex items-center gap-4 px-4 py-3 justify-between hover:bg-black/20 rounded-lg transition-colors"
           >
-            <div className="flex items-center gap-4 min-w-0 flex-1">
-              <div
-                className="bg-center bg-no-repeat aspect-square bg-cover rounded-lg size-14 shrink-0"
-                style={{ backgroundImage: `url("${apiUrl}${item.product.image}")` }}
-              ></div>
-              <div className="flex flex-col justify-center min-w-0">
-                <p className="text-[#f9f906] text-base font-medium leading-normal">
-                  {item.product.name}
-                </p>
-                <p className="text-white/70 text-sm font-normal leading-normal">
-                  {formatCurrency(item.product.price)}
-                </p>
-              </div>
-            </div>
+            <CartItemCard item={item} />
 
             <div className="shrink-0 flex flex-col items-end gap-1">
               {/* Quantity selector */}
               <QuantitySelector item={item} />
 
               <p className="text-white text-base font-semibold">
-                {formatCurrency((item.product.price) * item.quantity)}
+                {formatCurrency(item.product.price * item.quantity)}
               </p>
             </div>
           </div>
@@ -170,7 +156,7 @@ const CartSection = () => {
         total={total}
         onConfirm={handleConfirmPayment}
       />
-      <Receipt data={receiptData}/>
+      <Receipt data={receiptData} />
     </div>
   );
 };

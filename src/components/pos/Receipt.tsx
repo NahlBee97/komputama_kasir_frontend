@@ -20,15 +20,14 @@ export const Receipt = forwardRef<HTMLDivElement, ReceiptProps>(
       >
         {/* Header */}
         <div className="text-center mb-4">
-          <h1 className="font-bold text-xl uppercase">Diary Kasir</h1>
-          <p className="text-[10px]">Fried Chicken Expert</p>
-          <p className="text-[10px]">Jl. Sudirman No. 10</p>
+          <h1 className="font-bold text-xl uppercase">Dapur Diary</h1>
+          <p className="text-[10px]">Jl. Lintas Sumbawa, Sila, NTB.</p>
         </div>
 
         {/* Transaction Details */}
         <div className="text-[10px] mb-2 border-b border-black border-dashed pb-2">
           <div className="flex justify-between">
-            <span>Date:</span>
+            <span>Tanggal:</span>
             <span>{new Date().toLocaleDateString("id-ID")}</span>
           </div>
           <div className="flex justify-between">
@@ -56,19 +55,19 @@ export const Receipt = forwardRef<HTMLDivElement, ReceiptProps>(
             <span>{formatCurrency(data.order.totalAmount)}</span>
           </div>
           <div className="flex justify-between mb-1">
-            <span>CASH</span>
+            <span>Tunai</span>
             <span>{formatCurrency(data.order.paymentCash)}</span>
           </div>
           <div className="flex justify-between">
-            <span>CHANGE</span>
+            <span>Kembali</span>
             <span>{formatCurrency(data.order.paymentChange)}</span>
           </div>
         </div>
 
         {/* Footer */}
         <div className="text-center mt-6 text-[10px]">
-          <p>Thank You!</p>
-          <p>Please Come Again</p>
+          <p>Terima Kasih!</p>
+          <p>Silahkan Datang Lagi</p>
         </div>
       </div>
     );

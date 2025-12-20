@@ -7,7 +7,7 @@ import ProductSection from "../components/pos/ProductSection";
 
 const Pos = () => {
   const { user, logout } = useAuth();
-  
+
   const [searchQuery, setSearchQuery] = useState("");
 
   return (
@@ -18,13 +18,10 @@ const Pos = () => {
           {/* Header */}
           <div className="flex items-center justify-between p-6 border-b border-b-[#f9f906]/20">
             <div className="flex items-center gap-3">
-              <div
+              <img
                 className="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10"
-                style={{
-                  backgroundImage:
-                    'url("https://lh3.googleusercontent.com/aida-public/AB6AXuAW_zDxbYU1GJ2Fcl5dsuf3x992q8SyTXZdXj8JUOL6EGBaQakQQ2ruLIof4z239rhkznkUGwCR0fVu-o3ghSBDc11Z_ud02OLsCMPClKQlSDtZ7QbruHX2PBRJyhW9nNKtxn9Pjadd5g3jYwwknEaxFMPnX2IArGqUshqyahDMS62x03kN0v6eM1niLyuwSBaKFEn2CB3jjXMfZAS7nxjNWROjBenNyjNbm8d-ZfP2Pi3IH8lqeEGztDDsTsRWZVNdVxS0bmBvqqg")',
-                }}
-              ></div>
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuAW_zDxbYU1GJ2Fcl5dsuf3x992q8SyTXZdXj8JUOL6EGBaQakQQ2ruLIof4z239rhkznkUGwCR0fVu-o3ghSBDc11Z_ud02OLsCMPClKQlSDtZ7QbruHX2PBRJyhW9nNKtxn9Pjadd5g3jYwwknEaxFMPnX2IArGqUshqyahDMS62x03kN0v6eM1niLyuwSBaKFEn2CB3jjXMfZAS7nxjNWROjBenNyjNbm8d-ZfP2Pi3IH8lqeEGztDDsTsRWZVNdVxS0bmBvqqg"
+              />
               <div className="flex flex-col leading-tight">
                 <h1 className="text-[#f9f906] uppercase text-lg font-bold leading-normal">
                   Diary Kasir
@@ -51,9 +48,7 @@ const Pos = () => {
           </div>
 
           {/* products */}
-          <ProductSection
-            searchQuery={searchQuery}
-          />
+          <ProductSection searchQuery={searchQuery} />
         </div>
 
         {/* --- Right Column (Cart) --- */}

@@ -40,7 +40,7 @@ const Login = () => {
     if (isSuccess) {
       navigate("/pos");
     } else {
-      alert("Invalid PIN or Role"); 
+      alert("PIN Salah"); 
     }
   };
 
@@ -70,23 +70,23 @@ const Login = () => {
           </h1>
 
           {/* Role Selection Grid */}
-          <div className="grid grid-cols-2 gap-4 mb-8">
+          <div className="grid grid-cols-2 gap-4 mb-4">
             <RoleCard
               label="KASIR"
-              icon={<PointOfSaleIcon className="w-12 h-12" />}
+              icon={<PointOfSaleIcon className="w-8 h-8" />}
               isActive={activeRole === "CASHIER"}
               onClick={() => setActiveRole("CASHIER")}
             />
             <RoleCard
               label="ADMIN"
-              icon={<AdminPanelIcon className="w-12 h-12" />}
+              icon={<AdminPanelIcon className="w-8 h-8" />}
               isActive={activeRole === "ADMIN"}
               onClick={() => setActiveRole("ADMIN")}
             />
           </div>
 
           {/* PIN Input Display */}
-          <div className="flex justify-center px-4 py-8">
+          <div className="flex justify-center p-4">
             <div className="relative flex gap-4">
               {[...Array(6)].map((_, i) => (
                 <PinDot key={i} filled={i < pin.length} />

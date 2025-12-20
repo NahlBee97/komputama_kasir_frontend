@@ -261,10 +261,10 @@ const Products = () => {
               disabled={currentPage === 1}
               className="px-4 py-2 text-sm font-medium text-black bg-[#f9f906] rounded-md disabled:opacity-50 transition-colors hover:bg-[#f9f906]/80"
             >
-              Previous
+              Kembali
             </button>
             <span className="text-white">
-              Page <strong className="text-[#f9f906]">{currentPage}</strong> of{" "}
+              Hal <strong className="text-[#f9f906]">{currentPage}</strong> dari{" "}
               <strong className="text-[#f9f906]">{totalPages}</strong>
             </span>
             <button
@@ -272,7 +272,7 @@ const Products = () => {
               disabled={currentPage === totalPages}
               className="px-4 py-2 text-sm font-medium text-black bg-[#f9f906] rounded-md disabled:opacity-50 transition-colors hover:bg-[#f9f906]/80"
             >
-              Next
+              Lanjut
             </button>
           </div>
         )}

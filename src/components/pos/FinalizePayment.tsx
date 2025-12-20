@@ -15,9 +15,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
   total,
   onConfirm,
 }) => {
-  const [cashReceivedStr, setCashReceivedStr] = useState<string>(
-    ""
-  );
+  const [cashReceived, setCashReceived] = useState<string>("");
   const [change, setChange] = useState<number>(0);
 
   // Constants for styling
@@ -25,14 +23,12 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
 
   // Calculate change whenever input changes
   useEffect(() => {
-    const cash = parseFloat(cashReceivedStr.replace(/[^0-9.]/g, "")) || 0;
-    // eslint-disable-next-line
-    setChange(Math.max(0, cash - total));
-  }, [cashReceivedStr, total]);
+    setChange(Math.max(0, Number(cashReceived) - total));
+  }, [cashReceived, total]);
 
   // Handle Input Change
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCashReceivedStr(e.target.value);
+    setCashReceived(e.target.value);
   };
 
   if (!isOpen) return null;
@@ -86,7 +82,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
               style={{
                 boxShadow: `0 0 5px ${PRIMARY_COLOR}, 0 0 10px ${PRIMARY_COLOR}`,
               }}
-              value={cashReceivedStr}
+              value={cashReceived}
               onChange={handleInputChange}
               type="number"
             />
@@ -103,13 +99,9 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
         {/* Pay Button */}
         <div className="flex px-4 py-3 justify-center w-full mt-4">
           <button
-            onClick={() =>
-              onConfirm(
-                parseFloat(cashReceivedStr.replace(/[^0-9.]/g, "")) || 0,
-                change
-              )
-            }
-            className="flex min-w-[84px] w-full max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-14 px-5 flex-1 bg-[#f9f906] text-[#23230f] text-lg font-bold leading-normal tracking-[0.015em] hover:bg-yellow-300 transition-colors hover:shadow-[0_0_15px_rgba(249,249,6,0.5)]"
+            onClick={() => onConfirm(Number(cashReceived), change)}
+            disabled={Number(cashReceived) < total}
+            className="flex min-w-[84px] w-full max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-14 px-5 flex-1 bg-[#f9f906] text-[#23230f] text-lg font-bold leading-normal tracking-[0.015em] hover:bg-yellow-300 transition-colors hover:shadow-[0_0_15px_rgba(249,249,6,0.5)] disabled:cursor-not-allowed"
           >
             <span className="truncate">BAYAR & PRINT STRUK</span>
           </button>

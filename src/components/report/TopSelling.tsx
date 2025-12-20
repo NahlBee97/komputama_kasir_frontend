@@ -1,11 +1,11 @@
 import { formatCurrency } from "../../helper/formatCurrentcy";
-import type { Product } from "../../interfaces/productInterfaces";
+import type { TopProduct } from "../../interfaces/productInterfaces";
 import { GLOW_BORDER } from "../../pages/admin/Dashboard";
 import { WarningIcon } from "../Icons";
 import Loader from "../Loader";
 
 interface props {
-  products: Product[];
+  products: TopProduct[];
   isLoading: boolean;
   isError: boolean;
 }
@@ -81,7 +81,7 @@ const TopSelling = ({ products, isLoading, isError }: props) => {
               </tr>
             ) : (
               <>
-                {products.map((product: Product) => (
+                {products.map((product: TopProduct) => (
                   <tr
                     key={product.id}
                     className="border-b border-[#f9f906]/10 last:border-none hover:bg-white/5 transition-colors"
@@ -92,11 +92,11 @@ const TopSelling = ({ products, isLoading, isError }: props) => {
                     </td>
                     {/* Assuming the service returns the units sold in a property, e.g., 'unitsSold' */}
                     <td className="p-4 text-sm text-white/90 text-right">
-                      {product.sale || "N/A"}
+                      {product.totalSold || "N/A"}
                     </td>
                     {/* Assuming the service returns the calculated total revenue */}
                     <td className="p-4 text-sm text-white/90 text-right">
-                      {formatCurrency(product.sale * product.price)}
+                      {formatCurrency(product.totalSold * product.price)}
                     </td>
                   </tr>
                 ))}

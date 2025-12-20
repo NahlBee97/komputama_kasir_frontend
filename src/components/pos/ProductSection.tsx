@@ -5,6 +5,7 @@ import Loader from "../Loader";
 import ProductCard from "./ProductCard";
 import { addItemToCart } from "../../services/cartServices";
 import type { Product } from "../../interfaces/productInterfaces";
+import { WarningIcon } from "../Icons";
 
 interface AddItemData {
   productId: number;
@@ -23,13 +24,11 @@ const ProductSection = ({ searchQuery }: ProductSectionProps) => {
   const queryClient = useQueryClient();
 
   const {
-    data: queryResult, // Holds the result object: { products, totalPages, currentPage }
+    data: queryResult,
     isLoading: isProductLoading,
     error: productError,
   } = useQuery({
-    // Add page and take to the key to trigger refetch on page change
     queryKey: ["products"],
-    // Pass the pagination parameters to the service function
     queryFn: () => getProducts(1),
   });
 
@@ -45,10 +44,10 @@ const ProductSection = ({ searchQuery }: ProductSectionProps) => {
     },
   });
 
-  const products: Product[] = queryResult?.products || [];
-
-  // const totalPages: number = queryResult?.totalPages || 1;
-  // const currentPage: number = queryResult?.currentPage || 1;
+  const products: Product[] = useMemo(
+    () => queryResult?.products || [],
+    [queryResult]
+  );
 
   const filteredItems: Product[] = useMemo(() => {
     return products.filter((product) => {
@@ -65,19 +64,17 @@ const ProductSection = ({ searchQuery }: ProductSectionProps) => {
     });
   }, [products, searchQuery, activeCategory]);
 
-  if (isProductLoading) {
+  if (isProductLoading || productError) {
     return (
       <div className="flex flex-col gap-2 w-full h-full items-center justify-center">
-        <Loader size="lg" variant="primary" />
-        <h3 className="text-[#f9f906]">Memuat Product...</h3>
-      </div>
-    );
-  }
-
-  if (productError) {
-    return (
-      <div className="flex flex-col gap-2 w-full h-full items-center justify-center">
-        <h3 className="text-[#f9f906]">Gangguan Memuat Product...</h3>
+        {productError ? (
+          <WarningIcon />
+        ) : (
+          <Loader size="lg" variant="primary" />
+        )}
+        <h3 className="text-[#f9f906]">
+          {productError ? "Gangguan Memuat Product..." : "Memuat Product..."}
+        </h3>
       </div>
     );
   }
