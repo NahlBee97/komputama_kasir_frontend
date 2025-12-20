@@ -1,30 +1,49 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { BrowserRouter, Route, Routes } from "react-router-dom"; // Added Navigate
+import { AuthProvider } from "./components/AuthProvider";
 import Login from "./pages/Login";
-import NotFound from "./pages/NotFound";
+import ProtectedRoute from "./components/ProtectedRoute";
 import CashierLayout from "./layouts/CashierLayout";
 import Pos from "./pages/Pos";
+import NotFound from "./pages/NotFound";
+import AdminLayout from "./layouts/AdminLayout";
+import Dashboard from "./pages/admin/Dashboard";
+import Products from "./pages/admin/Products";
+import AddEditProduct from "./pages/admin/AddEditProduct";
+import Sales from "./pages/admin/Sales";
+import Report from "./pages/admin/Report";
+
+const queryClient = new QueryClient();
 
 const App = () => {
   return (
     <BrowserRouter>
-      <Routes>
-        {/* visitor routes */}
-        <Route path="/" element={<CashierLayout />}>
-          <Route index element={<Login />} />
-          <Route path="/pos" element={<Pos />} />
-        </Route>
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>
+          <Routes>
+            <Route element={<CashierLayout />}>
+              <Route path="/" element={<Login />} />
+              <Route element={<ProtectedRoute />}>
+                <Route path="/pos" element={<Pos />} />
+              </Route>
+            </Route>
 
-        {/* Admin Routes
-        <Route path="/admin" element={<AdminLayout />}>
-        <Route index element={<Dashboard />} />
-        <Route path="profile" element={<ProfileEditor />} />
-        <Route path="news" element={<AdminNews />} />
-        <Route path="news/create" element={<CreateNews />} />
-        <Route path="publications" element={<AdminPublications />} />
-        <Route path="publications/create" element={<CreatePublication />} />
-        </Route> */}
-        <Route path="*" element={<NotFound />} />
-      </Routes>
+            <Route element={<AdminLayout />}>
+              <Route element={<ProtectedRoute />}>
+                <Route path="/admin" element={<Dashboard />} />
+                <Route path="/admin/products" element={<Products />} />
+                <Route path="/admin/products/add" element={<AddEditProduct />} />
+                <Route path="/admin/products/edit/:id" element={<AddEditProduct />} />
+                <Route path="/admin/sales" element={<Sales />} />
+                <Route path="/admin/report" element={<Report />} />
+              </Route>
+            </Route>
+
+            {/* 404 Page */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </AuthProvider>
+      </QueryClientProvider>
     </BrowserRouter>
   );
 };

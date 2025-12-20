@@ -1,32 +1,27 @@
-// import { useEffect } from "react";
 import { Outlet } from "react-router-dom";
+import Sidebar from "../components/admin/Sidebar";
 import Footer from "../components/Footer";
-// import Sidebar from "../components/SideBar";
 
 const AdminLayout = () => {
-  //   useEffect(() => {
-  //     const isAuth = localStorage.getItem("isAuthenticated");
-  //     if (!isAuth) {
-  //       navigate("/login");
-  //     }
-  //   }, [navigate]);
-
   return (
     <div
-      className="relative flex min-h-screen w-full flex-col bg-black text-[#f9f906] overflow-x-hidden font-sans"
+      className="flex h-screen w-screen bg-black text-[#f9f906] overflow-hidden font-sans"
       style={{
-        backgroundImage: `radial-gradient(circle at center, "#23230f" 0%, #000000 70%)`,
+        backgroundImage: `radial-gradient(circle at center, #23230f 0%, #000000 70%)`,
       }}
     >
-      <div className="flex">
-        <div>{/* <Sidebar /> */}</div>
-        <div>
-          <main className="container mx-auto">
-            <Outlet />
-          </main>
-        </div>
+      <div className="shrink-0">
+        <Sidebar />
       </div>
-      <Footer />
+
+      <main className="flex-1 flex flex-col justify-between min-h-screen overflow-y-auto">
+        <div className="px-4">
+          <Outlet />
+        </div>
+        <div>
+          <Footer />
+        </div>
+      </main>
     </div>
   );
 };

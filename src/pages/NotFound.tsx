@@ -1,3 +1,5 @@
+import { useNavigate } from "react-router-dom";
+
 const EmptyBucketIllustration = () => (
   <svg
     className="w-full h-auto text-[#f9f906] filter drop-shadow-[0_0_8px_rgba(249,249,6,0.6)]"
@@ -34,6 +36,7 @@ const EmptyBucketIllustration = () => (
 // --- Main Page Component ---
 
 const NotFound = () => {
+  const navigate = useNavigate();
   return (
     <div className="relative flex h-auto min-h-screen w-full flex-col bg-[#0A0A0A] dark group/design-root overflow-hidden font-sans">
       {/* Background Radial Gradient */}
@@ -73,13 +76,14 @@ const NotFound = () => {
                 textShadow: "0 0 10px rgba(249,249,6,0.5)",
               }}
             >
-              PAGE NOT FOUND
+              Halaman Tidak Ditemukan
             </h2>
 
             {/* Action Button */}
-            <div className="flex w-full justify-center pt-8">
+            <div className="flex w-full justify-center pt-8"
+            onClick={() => navigate("/")}>
               <button className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-8 bg-[#f9f906] text-[#0A0A0A] text-base font-bold uppercase tracking-[0.05em] transition-all hover:shadow-[0_0_15px_rgba(249,249,6,0.8)] focus:outline-none focus:ring-2 focus:ring-[#f9f906] focus:ring-offset-2 focus:ring-offset-black">
-                <span>Back to Home</span>
+                <span>Kembali</span>
               </button>
             </div>
           </div>

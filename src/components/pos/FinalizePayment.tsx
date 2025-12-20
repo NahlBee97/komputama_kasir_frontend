@@ -1,26 +1,6 @@
 import { useState, useEffect } from "react";
-
-// --- Icons ---
-
-const CloseIcon = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    className="w-8 h-8"
-  >
-    <line x1="18" y1="6" x2="6" y2="18"></line>
-    <line x1="6" y1="6" x2="18" y2="18"></line>
-  </svg>
-);
-
-// --- Props Interface ---
+import { CloseIcon } from "../Icons";
+import { formatCurrency } from "../../helper/formatCurrentcy";
 
 interface PaymentModalProps {
   isOpen: boolean;
@@ -29,17 +9,13 @@ interface PaymentModalProps {
   onConfirm: (cashReceived: number, change: number) => void;
 }
 
-// --- Main Component ---
-
 const PaymentModal: React.FC<PaymentModalProps> = ({
   isOpen,
   onClose,
   total,
   onConfirm,
 }) => {
-  const [cashReceivedStr, setCashReceivedStr] = useState<string>(
-    total.toString()
-  );
+  const [cashReceived, setCashReceived] = useState<string>("");
   const [change, setChange] = useState<number>(0);
 
   // Constants for styling
@@ -47,14 +23,12 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
 
   // Calculate change whenever input changes
   useEffect(() => {
-    const cash = parseFloat(cashReceivedStr.replace(/[^0-9.]/g, "")) || 0;
-    // eslint-disable-next-line
-    setChange(Math.max(0, cash - total));
-  }, [cashReceivedStr, total]);
+    setChange(Math.max(0, Number(cashReceived) - total));
+  }, [cashReceived, total]);
 
   // Handle Input Change
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCashReceivedStr(e.target.value);
+    setCashReceived(e.target.value);
   };
 
   if (!isOpen) return null;
@@ -83,7 +57,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
             className="text-[#f9f906] tracking-tight text-[32px] font-bold leading-tight text-center pb-3 pt-6"
             style={{ textShadow: "0 0 8px rgba(249, 249, 6, 0.5)" }}
           >
-            FINALIZE PAYMENT
+            PEMBAYARAN
           </h1>
         </div>
 
@@ -93,7 +67,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
             className="text-[#f9f906] tracking-tight text-[40px] font-bold leading-tight text-center pb-3 pt-2"
             style={{ textShadow: "0 0 8px rgba(249, 249, 6, 0.5)" }}
           >
-            TOTAL: Rp {total.toLocaleString("id-ID")}
+            TOTAL : {formatCurrency(total)}
           </h1>
         </div>
 
@@ -101,15 +75,14 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
         <div className="flex w-full flex-wrap items-end gap-4 px-4 py-3">
           <label className="flex flex-col w-full flex-1">
             <p className="text-[#f9f906] text-base font-medium leading-normal pb-2">
-              Cash Received
+              Uang Diterima
             </p>
             <input
               className="flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#f9f906] focus:outline-0 focus:ring-2 focus:ring-[#f9f906] border border-[#f9f906]/50 bg-[#23230f] h-14 placeholder:text-[#f9f906]/50 p-[15px] text-base font-normal leading-normal transition-shadow"
               style={{
                 boxShadow: `0 0 5px ${PRIMARY_COLOR}, 0 0 10px ${PRIMARY_COLOR}`,
               }}
-              placeholder="Enter amount"
-              value={cashReceivedStr}
+              value={cashReceived}
               onChange={handleInputChange}
               type="number"
             />
@@ -119,22 +92,18 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
         {/* Change Due Display */}
         <div className="flex flex-col items-center">
           <h1 className="text-[#f9f906] text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 text-center pb-3 pt-2">
-            Change Due: Rp {change.toLocaleString("id-ID")}
+            Pengembalian: {formatCurrency(change)}
           </h1>
         </div>
 
         {/* Pay Button */}
         <div className="flex px-4 py-3 justify-center w-full mt-4">
           <button
-            onClick={() =>
-              onConfirm(
-                parseFloat(cashReceivedStr.replace(/[^0-9.]/g, "")) || 0,
-                change
-              )
-            }
-            className="flex min-w-[84px] w-full max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-14 px-5 flex-1 bg-[#f9f906] text-[#23230f] text-lg font-bold leading-normal tracking-[0.015em] hover:bg-yellow-300 transition-colors hover:shadow-[0_0_15px_rgba(249,249,6,0.5)]"
+            onClick={() => onConfirm(Number(cashReceived), change)}
+            disabled={Number(cashReceived) < total}
+            className="flex min-w-[84px] w-full max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-14 px-5 flex-1 bg-[#f9f906] text-[#23230f] text-lg font-bold leading-normal tracking-[0.015em] hover:bg-yellow-300 transition-colors hover:shadow-[0_0_15px_rgba(249,249,6,0.5)] disabled:cursor-not-allowed"
           >
-            <span className="truncate">PAY & PRINT RECEIPT</span>
+            <span className="truncate">BAYAR & PRINT STRUK</span>
           </button>
         </div>
       </div>
