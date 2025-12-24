@@ -1,5 +1,4 @@
 import { useNavigate } from "react-router-dom";
-import { apiUrl } from "../../config";
 import { formatCurrency } from "../../helper/formatCurrentcy";
 import type { Product } from "../../interfaces/productInterfaces";
 import { GLOW_TEXT } from "../../pages/admin/Dashboard";
@@ -91,7 +90,7 @@ const ProductTable = ({ products, isLoading, isError }: props) => {
             <td className="p-4 text-sm text-white/90">
               <img
                 className="w-10 h-10 rounded-sm object-cover"
-                src={apiUrl + product.image}
+                src={product.image as string}
                 alt="product image"
               />
             </td>
