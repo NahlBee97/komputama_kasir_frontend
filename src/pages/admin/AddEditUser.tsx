@@ -62,9 +62,9 @@ const AddEditUser = () => {
   const formik = useFormik<NewUser | UpdateUser>({
     enableReinitialize: true,
     initialValues: {
-      name: mode === "edit" ? user?.name : "",
-      pin: mode === "edit" ? user?.pin : "",
-      shift: mode === "edit" ? user?.shift === "DAY" ? "Siang" : "Malam" : shifts[0],
+      name: user?.name || "",
+      pin: user?.pin || "",
+      shift: user?.shift ? user.shift === "DAY" ? "Siang" : "Malam" : shifts[0],
     },
     validationSchema: mode === "edit" ? editUserSchema : userSchema,
     // ⭐️ CHANGE: Updated onSubmit to use FormData and include the file
