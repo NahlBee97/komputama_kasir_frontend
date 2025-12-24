@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getProducts } from "../../services/productServices";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import Loader from "../Loader";
 import ProductCard from "./ProductCard";
 import { addItemToCart } from "../../services/cartServices";
@@ -13,14 +13,14 @@ interface AddItemData {
 }
 
 interface ProductSectionProps {
+  activeCategory: string;
   searchQuery: string;
 }
 
-const categories = ["Ayam Geprek", "Minuman", "Tambahan"];
-
-const ProductSection = ({ searchQuery }: ProductSectionProps) => {
-  const [activeCategory, setActiveCategory] = useState(categories[0]);
-
+const ProductSection = ({
+  searchQuery,
+  activeCategory,
+}: ProductSectionProps) => {
   const queryClient = useQueryClient();
 
   const {
@@ -64,6 +64,14 @@ const ProductSection = ({ searchQuery }: ProductSectionProps) => {
     });
   }, [products, searchQuery, activeCategory]);
 
+  if (filteredItems.length === 0) {
+    return (
+      <div className="flex flex-col gap-2 w-full h-full items-center justify-center">
+        <h3 className="text-[#f9f906]">Tidak Ada Produk</h3>
+      </div>
+    );
+  }
+
   if (isProductLoading || productError) {
     return (
       <div className="flex flex-col gap-2 w-full h-full items-center justify-center">
@@ -80,37 +88,15 @@ const ProductSection = ({ searchQuery }: ProductSectionProps) => {
   }
 
   return (
-    <div className="flex-1 overflow-y-auto px-6 scrollbar-thin scrollbar-thumb-[#f9f906]/20 scrollbar-track-transparent">
-      {/* Tabs */}
-      <div className="pb-3">
-        <div className="flex border-b border-[#f9f906]/20 gap-8">
-          {categories.map((category) => (
-            <button
-              key={category}
-              onClick={() => setActiveCategory(category)}
-              className={`flex flex-col items-center justify-center border-b-[3px] pb-[13px] pt-2 transition-colors duration-300 ${
-                activeCategory === category
-                  ? "border-b-[#f9f906] text-[#f9f906]"
-                  : "border-b-transparent text-[#f9f906]/60 hover:text-[#f9f906]"
-              }`}
-            >
-              <p className="text-base font-bold leading-normal tracking-[0.015em]">
-                {category}
-              </p>
-            </button>
-          ))}
-        </div>
-      </div>
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
-        {filteredItems.map((item) => (
-          <ProductCard
-            key={item.id}
-            item={item}
-            disabled={isPending}
-            onClick={() => addItem({ productId: item.id, quantity: 1 })}
-          />
-        ))}
-      </div>
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
+      {filteredItems.map((item) => (
+        <ProductCard
+          key={item.id}
+          item={item}
+          disabled={isPending}
+          onClick={() => addItem({ productId: item.id, quantity: 1 })}
+        />
+      ))}
     </div>
   );
 };

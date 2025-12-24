@@ -97,10 +97,12 @@ const AddEditProduct = () => {
   const formik = useFormik<NewProduct | UpdateProduct>({
     enableReinitialize: true,
     initialValues: {
-      name: mode === "edit" ? product?.name : "",
-      price: mode === "edit" ? product?.price : 0,
-      stock: mode === "edit" ? product?.stock : 0,
-      category: mode === "edit" ? product?.category : categories[0],
+      name: product?.name || "",
+
+      price: product?.price || 0,
+      stock: product?.stock || 0,
+
+      category: product?.category || categories[0],
     },
     validationSchema: mode === "edit" ? editProductSchema : productSchema,
     // ⭐️ CHANGE: Updated onSubmit to use FormData and include the file
@@ -136,7 +138,7 @@ const AddEditProduct = () => {
     ? previewUrl
     : mode === "edit" && product?.image
     ? product.image
-    : "";
+    : null;
 
   return (
     <main className="flex-1 layout-container flex h-full grow flex-col">

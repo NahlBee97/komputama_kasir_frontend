@@ -1,5 +1,6 @@
 import type { Order} from "../../interfaces/orderInterface";
 import { formatCurrency } from "../../helper/formatCurrentcy";
+import { format } from "date-fns";
 
 // --- Style Constants ---
 
@@ -40,7 +41,7 @@ const OrderDetailsModal = ({
       >
         {/* Header */}
         <div
-          className="flex flex-wrap justify-between gap-3 p-6 border-b"
+          className=" p-6 border-b"
           style={{ borderColor: "rgba(249, 249, 6, 0.2)" }}
         >
           <p
@@ -48,6 +49,12 @@ const OrderDetailsModal = ({
             style={{ color: PRIMARY_COLOR, textShadow: GLOW_TEXT }}
           >
             ORDER #{order.id}
+          </p>
+          <p
+            className="font-medium leading-tight tracking-[-0.033em]"
+            style={{ color: PRIMARY_COLOR, textShadow: GLOW_TEXT }}
+          >
+            {format(order.createdAt, "dd MMMM yyyy HH:mm")}
           </p>
         </div>
 
@@ -96,16 +103,6 @@ const OrderDetailsModal = ({
 
         {/* Button Group */}
         <div className="flex flex-1 gap-3 flex-wrap p-6 pt-2 justify-between">
-          {/* <button
-            onClick={onReprint}
-            className="flex flex-1 min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-5 text-base font-bold leading-normal tracking-[0.015em] transition-all hover:brightness-110"
-            style={{
-              backgroundColor: PRIMARY_COLOR,
-              color: BACKGROUND_DARK,
-            }}
-          >
-            <span className="truncate">REPRINT RECEIPT</span>
-          </button> */}
           <button
             onClick={onClose}
             className="flex flex-1 min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-5 bg-transparent border text-base font-bold leading-normal tracking-[0.015em] transition-all"

@@ -7,6 +7,7 @@ import {
   LogoutIcon,
   ReceiptIcon,
   StorefrontIcon,
+  UserIcon,
 } from "../Icons";
 
 const GLOW_BORDER = "0 0 1px #f9f906, 0 0 4px #f9f906, 0 0 8px #f9f906";
@@ -17,6 +18,7 @@ const navLinks = [
   { label: "Pengaturan Produk", link: "/admin/products", icon: <InventoryIcon/> },
   { label: "Riwayat Penjualan", link: "/admin/sales", icon: <ReceiptIcon/> },
   { label: "Laporan Penjualan", link: "/admin/report", icon: <AssessmentIcon/> },
+  { label: "List Petugas Kasir", link: "/admin/users", icon: <UserIcon/> },
 ];
 
 const Sidebar = () => {

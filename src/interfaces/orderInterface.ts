@@ -1,5 +1,6 @@
-import type { OrderStatus } from "./authInterfaces";
 import type { Product } from "./productInterfaces";
+
+export type OrderStatus = "COMPLETED" | "VOID";
 
 export interface Order {
   id: number;

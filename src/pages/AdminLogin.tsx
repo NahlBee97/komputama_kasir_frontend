@@ -4,10 +4,8 @@ import { PinDot } from "../components/login/PinDot";
 import { KeypadButton } from "../components/login/KeyPad";
 import { useAuth } from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import LoadingModal from "../components/LoadingModal";
-import { getAllUsers } from "../services/userServices";
-import type { User } from "../interfaces/authInterfaces";
 import toast from "react-hot-toast";
 
 const Login = () => {
@@ -15,12 +13,6 @@ const Login = () => {
   const navigate = useNavigate();
 
   const [pin, setPin] = useState<string>("");
-  const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
-
-  const { data: users = [], isLoading: isLoadingUsers } = useQuery({
-    queryKey: ["users"],
-    queryFn: getAllUsers,
-  });
 
   useEffect(() => {
     if (user) {
@@ -48,7 +40,7 @@ const Login = () => {
         throw new Error("PIN harus terdiri dari 6 digit.");
       }
 
-      const isSuccess = await login(selectedUserId!, "CASHIER", pin);
+      const isSuccess = await login(26, "ADMIN", pin);
 
       if (!isSuccess) {
         throw new Error("PIN Salah! Silakan coba lagi.");
@@ -59,18 +51,13 @@ const Login = () => {
 
     onSuccess: () => {
       toast.success("Login berhasil!");
-      navigate("/pos");
+      navigate("/admin");
     },
 
     onError: (error: Error) => {
       toast.error(error.message);
     },
   });
-
-  const handleUserChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedUserId = Number(e.target.value);
-    setSelectedUserId(selectedUserId);
-  };
 
   // Keyboard support
   useEffect(() => {
@@ -94,28 +81,8 @@ const Login = () => {
         <div className="layout-content-container flex flex-col max-w-sm w-full mx-auto">
           {/* Headline */}
           <h1 className="tracking-light text-[32px] font-bold leading-tight text-center mb-8">
-            DIARY KASIR
+            DIARY KASIR ADMIN
           </h1>
-
-          {/* Cashier Selection */}
-          <div className="flex flex-col justify-center items-center gap-2 mb-2">
-            <select
-              id="cashier-select"
-              className="mb-4 p-2 border border-black rounded w-full"
-              onChange={handleUserChange}
-            >
-              <option value="">
-                {isLoadingUsers
-                  ? "Memuat data kasir..."
-                  : "Pilih Petugas Kasir"}
-              </option>
-              {users.map((user: User) => (
-                <option key={user.id} value={user.id}>
-                  {user.name}
-                </option>
-              ))}
-            </select>
-          </div>
 
           {/* Role Selection Grid */}
           <h3 className="text-center text-lg font-medium">

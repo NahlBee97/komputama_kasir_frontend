@@ -3,7 +3,7 @@ import type { User } from "../interfaces/authInterfaces";
 
 export interface AuthContextType {
   user: User | null;
-  login: (role: string, pin: string) => boolean | Promise<boolean>;
+  login: (userId: number, role: string, pin: string) => boolean | Promise<boolean>;
   logout: () => void;
 }
 

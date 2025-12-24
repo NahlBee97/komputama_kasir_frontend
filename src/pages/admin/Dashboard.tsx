@@ -5,18 +5,31 @@ import { getTodayOrders } from "../../services/orderServices";
 import { formatCurrency } from "../../helper/formatCurrentcy";
 import { getLowStockProducts } from "../../services/productServices";
 import type { Order } from "../../interfaces/orderInterface";
+import { getAllUsers } from "../../services/userServices";
+import { useState } from "react";
+import type { User } from "../../interfaces/authInterfaces";
 
 export const GLOW_BORDER = "0 0 1px #f9f906, 0 0 4px #f9f906, 0 0 8px #f9f906";
 export const GLOW_TEXT = "0 0 2px #f9f906, 0 0 5px #f9f906";
 
 const Dashboard = () => {
+  const [selectedUserId, setSelectedUserId] = useState<number | undefined>(
+    undefined
+  );
+
+  const { data: users = [], isLoading: isLoadingUsers } = useQuery({
+    queryKey: ["users"],
+    queryFn: getAllUsers,
+  });
+
   const {
     data: todayOrders = [],
     isLoading: isOrderLoading,
     error: orderError,
   } = useQuery({
-    queryKey: ["todayOrders"],
-    queryFn: () => getTodayOrders(),
+    queryKey: ["todayOrders", selectedUserId],
+
+    queryFn: () => getTodayOrders(selectedUserId),
   });
 
   const {
@@ -28,6 +41,11 @@ const Dashboard = () => {
     queryFn: () => getLowStockProducts(),
   });
 
+  const handleUserChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const val = e.target.value;
+    // Logika: Jika value kosong, set undefined (tampilkan semua), jika ada angka set Number
+    setSelectedUserId(val ? Number(val) : undefined);
+  };
   // order summaries
   const todayTotal = todayOrders.reduce(
     (acc: number, order: Order) => acc + order.totalAmount,
@@ -50,6 +68,26 @@ const Dashboard = () => {
           >
             PENJUALAN HARI INI
           </h1>
+
+          {/* Cashier Selection */}
+          <div className="flex flex-col justify-center items-center gap-2 mb-2">
+            <select
+              id="cashier-select"
+              className="mb-4 p-2 border border-black rounded w-full"
+              onChange={handleUserChange}
+            >
+              <option value="">
+                {isLoadingUsers
+                  ? "Memuat data kasir..."
+                  : "Pilih Petugas Kasir"}
+              </option>
+              {users.map((user: User) => (
+                <option key={user.id} value={user.id}>
+                  {user.name}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
 
         {/* Stats Grid */}
@@ -82,7 +120,11 @@ const Dashboard = () => {
           >
             PRODUK STOK RENDAH
           </h2>
-          <LowStockTable products={products} isLoading={isProductsLoading} isError={!!productsError} />
+          <LowStockTable
+            products={products}
+            isLoading={isProductsLoading}
+            isError={!!productsError}
+          />
         </div>
       </div>
     </main>
