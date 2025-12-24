@@ -4,6 +4,8 @@ import { getTopProducts } from "../../services/productServices"; // Needs updati
 import { getOrderSummary } from "../../services/orderServices"; // Needs updating
 import { useState } from "react"; // Import useState
 import TopSelling from "../../components/report/TopSelling";
+import { getAllUsers } from "../../services/userServices";
+import type { User } from "../../interfaces/authInterfaces";
 
 const GLOW_TEXT = "0 0 2px #f9f906, 0 0 5px #f9f906";
 
@@ -30,6 +32,15 @@ const Report = () => {
   const [startDate, setStartDate] = useState<string>(formatDate(now));
   const [endDate, setEndDate] = useState<string>(formatDate(now));
 
+  const [selectedUserId, setSelectedUserId] = useState<number | undefined>(
+    undefined
+  );
+
+  const { data: users = [], isLoading: isLoadingUsers } = useQuery({
+    queryKey: ["users"],
+    queryFn: getAllUsers,
+  });
+
   // --- TOP PRODUCTS QUERY ---
   const {
     data: topProducts = [],
@@ -37,9 +48,9 @@ const Report = () => {
     error: topProductsError,
   } = useQuery({
     // 2. Add date range to queryKey to trigger refetch
-    queryKey: ["topProducts", startDate, endDate],
+    queryKey: ["topProducts", startDate, endDate, selectedUserId],
     // 2. Pass dates to the service function
-    queryFn: () => getTopProducts(startDate, endDate),
+    queryFn: () => getTopProducts(startDate, endDate, selectedUserId),
   });
 
   // --- ORDER SUMMARY QUERY ---
@@ -54,9 +65,9 @@ const Report = () => {
     error: summaryError,
   } = useQuery<OrderSummary>({
     // 2. Add date range to queryKey to trigger refetch
-    queryKey: ["summary", startDate, endDate],
+    queryKey: ["summary", startDate, endDate, selectedUserId],
     // 2. Pass dates to the service function
-    queryFn: () => getOrderSummary(startDate, endDate),
+    queryFn: () => getOrderSummary(startDate, endDate, selectedUserId),
   });
 
   // 3. HANDLERS to update state and trigger refetch
@@ -66,6 +77,12 @@ const Report = () => {
 
   const handleEndDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEndDate(e.target.value);
+  };
+
+  const handleUserChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const val = e.target.value;
+    // Logika: Jika value kosong, set undefined (tampilkan semua), jika ada angka set Number
+    setSelectedUserId(val ? Number(val) : undefined);
   };
 
   return (
@@ -118,11 +135,25 @@ const Report = () => {
               />
             </div>
 
-            {/* Export Button
-            <button className="flex h-10 items-center justify-center gap-2 whitespace-nowrap rounded-lg bg-[#f9f906] px-5 text-sm font-medium text-black transition-colors hover:bg-yellow-400">
-              <DownloadIcon />
-              <span>Export Report</span>
-            </button> */}
+            {/* Cashier Selection */}
+            <div className="flex flex-col justify-center items-center gap-2 mb-2">
+              <select
+                id="cashier-select"
+                className="mb-4 p-2 border border-black rounded w-full"
+                onChange={handleUserChange}
+              >
+                <option value="">
+                  {isLoadingUsers
+                    ? "Memuat data kasir..."
+                    : "Pilih Petugas Kasir"}
+                </option>
+                {users.map((user: User) => (
+                  <option key={user.id} value={user.id}>
+                    {user.name}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
         </div>
 

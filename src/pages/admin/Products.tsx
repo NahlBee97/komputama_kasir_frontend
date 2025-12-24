@@ -1,45 +1,33 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import StatusBadge from "../../components/admin/StatusBadge";
-import {
-  AddIcon,
-  DeleteIcon,
-  EditIcon,
-  SearchIcon,
-  WarningIcon,
-} from "../../components/Icons";
+import { useQuery } from "@tanstack/react-query";
+import { AddIcon, SearchIcon } from "../../components/Icons";
 
 import { GLOW_BORDER, GLOW_TEXT } from "./Dashboard";
-// Make sure to update your productServices file
-import { deleteProduct, getProducts } from "../../services/productServices";
-import { formatCurrency } from "../../helper/formatCurrentcy";
-import Loader from "../../components/Loader";
+
+import { getProducts } from "../../services/productServices";
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { Product } from "../../interfaces/productInterfaces";
-import { apiUrl } from "../../config";
+import ProductTable from "../../components/admin/ProductTable";
+import ProductTab from "../../components/pos/ProductTab";
+
+const categories = ["Ayam Geprek", "Minuman", "Tambahan"];
 
 const Products = () => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
 
-  // 1. ADD PAGINATION STATE
   const [page, setPage] = useState<number>(1);
+  const [activeCategory, setActiveCategory] = useState(categories[0]);
 
-  const queryClient = useQueryClient();
-
-  // 2. UPDATE useQuery for Pagination
   const {
-    data: queryResult, // Holds the result object: { products, totalPages, currentPage }
+    data: queryResult,
     isLoading: isProductLoading,
     error: productError,
   } = useQuery({
-    // Add page and take to the key to trigger refetch on page change
     queryKey: ["products", page],
-    // Pass the pagination parameters to the service function
     queryFn: () => getProducts(page),
   });
 
-  // Extract products and pagination metadata
   const products: Product[] = useMemo(
     () => queryResult?.products || [],
     [queryResult]
@@ -48,48 +36,32 @@ const Products = () => {
   const totalPages: number = queryResult?.totalPages || 1;
   const currentPage: number = queryResult?.currentPage || 1;
 
-  const { mutate: deleteItem, isPending: deletePending } = useMutation({
-    mutationFn: async (id: number) => {
-      return deleteProduct(id);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["products"] });
-      alert("Delete Product Success");
-    },
-    onError: (error) => {
-      alert("Error: " + error);
-    },
-  });
-
   const filteredItems: Product[] = useMemo(() => {
-    return products.length > 0 && searchQuery
-      ? products.filter(
-          (product: Product) =>
-            product.isActive === true &&
-            (product.category
-              .toLowerCase()
-              .includes(searchQuery.toLowerCase()) ||
-              product.category
-                .toLowerCase()
-                .includes(searchQuery.toLowerCase())) &&
-            (product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-              product.name.toLowerCase().includes(searchQuery.toLowerCase()))
-        )
-      : products;
-  }, [searchQuery, products]);
+    const query = searchQuery.toLowerCase().trim();
+    const selectedCategory = activeCategory.toLowerCase();
 
-  // Handle page navigation
+    return products.filter((product: Product) => {
+      const matchesCategory = product.category
+        .toLowerCase()
+        .includes(selectedCategory);
+
+      const matchesSearch =
+        !query ||
+        product.name.toLowerCase().includes(query) ||
+        product.category.toLowerCase().includes(query);
+
+      return matchesCategory && matchesSearch;
+    });
+  }, [products, searchQuery, activeCategory]);
+
   const handlePageChange = (newPage: number) => {
     if (newPage >= 1 && newPage <= totalPages) {
       setPage(newPage);
-      // Optional: Clear search query on page change if search is global,
-      // but since we only filter the current page, keeping it may be fine.
     }
   };
 
   return (
     <main className="flex flex-1 flex-col p-6 lg:p-10">
-      {/* Header and Search remain the same */}
       <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
         <h1
           className="text-[#f9f906] text-4xl font-bold leading-tight tracking-[-0.033em]"
@@ -120,137 +92,26 @@ const Products = () => {
         </div>
       </div>
 
+      {/* 1. TABLE HEADER */}
+      <div className="mb-4">
+        <ProductTab
+          categories={categories}
+          activeCategory={activeCategory}
+          onSetCategory={setActiveCategory}
+        />
+      </div>
+
       {/* Table Container */}
       <div
         className="overflow-hidden rounded-xl border border-[#f9f906]/50 bg-[#0A0A0A] flex-1 flex flex-col"
         style={{ boxShadow: GLOW_BORDER }}
       >
         <div className="overflow-x-auto flex-1">
-          <table className="w-full text-left">
-            <thead className="border-b border-[#f9f906]/20">
-              {/* Table Headers remain the same */}
-              {!productError && !isProductLoading && (
-                <tr>
-                  <th className="py-4 px-2 text-sm font-semibold uppercase text-[#f9f906]/70">
-                    # ID
-                  </th>
-                  <th className="py-4 px-2 text-sm font-semibold uppercase text-[#f9f906]/70">
-                    Gambar
-                  </th>
-                  <th className="py-4 px-2 text-sm font-semibold uppercase text-[#f9f906]/70">
-                    Nama
-                  </th>
-                  <th className="py-4 px-2 text-sm font-semibold uppercase text-[#f9f906]/70">
-                    Kategori
-                  </th>
-                  <th className="py-4 px-2 text-sm font-semibold uppercase text-[#f9f906]/70 text-right">
-                    Harga
-                  </th>
-                  <th className="py-4 px-2 text-sm font-semibold uppercase text-[#f9f906]/70 text-right">
-                    Stok
-                  </th>
-                  <th className="py-4 px-2 text-sm font-semibold uppercase text-[#f9f906]/70 text-center">
-                    Status
-                  </th>
-                  <th className="py-4 px-2 text-sm font-semibold uppercase text-[#f9f906]/70 text-center">
-                    Tindakan
-                  </th>
-                </tr>
-              )}
-            </thead>
-            <tbody>
-              {isProductLoading || productError ? (
-                // Loading/Error state inside the table body
-                <tr>
-                  <td colSpan={8} className="p-10 text-center">
-                    <div className="flex flex-col h-80 gap-3 justify-center items-center">
-                      {productError ? <WarningIcon /> : <Loader size="md" />}
-                      <p className="text-white">
-                        {productError
-                          ? "Error Loading Products"
-                          : "Loading Products..."}
-                      </p>
-                    </div>
-                  </td>
-                </tr>
-              ) : filteredItems.length === 0 ? (
-                <tr>
-                  <td
-                    colSpan={8}
-                    className="p-10 text-center text-[#f9f906]/70"
-                  >
-                    Produk tidak ditemukan
-                  </td>
-                </tr>
-              ) : (
-                <>
-                  {filteredItems.map((product: Product) => (
-                    <tr
-                      key={product.id}
-                      className="border-b border-[#f9f906]/10 last:border-none hover:bg-white/5 transition-colors"
-                    >
-                      {/* Table Cells remain the same */}
-                      <td className="p-4 text-sm text-white/70">
-                        {product.id}
-                      </td>
-                      <td className="p-4 text-sm text-white/90">
-                        <img
-                          className="w-10 h-10 rounded-sm object-cover"
-                          src={apiUrl + product.image}
-                          alt="product image"
-                        />
-                      </td>
-                      <td className="p-4 text-sm text-white/90">
-                        {product.name}
-                      </td>
-                      <td className="p-4 text-sm text-white/70">
-                        {product.category}
-                      </td>
-                      <td className="p-4 text-sm text-white/90 text-right">
-                        {formatCurrency(product.price)}
-                      </td>
-                      <td className="p-4 text-sm text-white/90 text-right">
-                        {product.stock}
-                      </td>
-                      <td className="p-4 text-sm text-center">
-                        <StatusBadge
-                          status={
-                            product.stock < 10
-                              ? product.stock === 0
-                                ? "Habis"
-                                : "Rendah"
-                              : "Cukup"
-                          }
-                        />
-                      </td>
-                      <td className="p-4">
-                        <div className="flex items-center justify-center gap-2">
-                          <button
-                            className="text-[#f9f906] hover:text-[#f9f906]/70 transition-all duration-200"
-                            style={{ textShadow: GLOW_TEXT }}
-                            disabled={deletePending}
-                            onClick={() =>
-                              navigate(`/admin/products/edit/${product.id}`)
-                            }
-                          >
-                            <EditIcon />
-                          </button>
-                          <button
-                            className="text-[#f9f906] hover:text-[#f9f906]/70 transition-all duration-200"
-                            style={{ textShadow: GLOW_TEXT }}
-                            disabled={deletePending}
-                            onClick={() => deleteItem(product.id)}
-                          >
-                            <DeleteIcon />
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </>
-              )}
-            </tbody>
-          </table>
+          <ProductTable
+            products={filteredItems}
+            isLoading={isProductLoading}
+            isError={!!productError}
+          />
         </div>
 
         {/* 3. PAGINATION CONTROLS */}

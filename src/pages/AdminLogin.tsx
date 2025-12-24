@@ -6,6 +6,7 @@ import { useAuth } from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import LoadingModal from "../components/LoadingModal";
+import toast from "react-hot-toast";
 
 const Login = () => {
   const { user, login } = useAuth();
@@ -36,16 +37,25 @@ const Login = () => {
   const { mutate, isPending } = useMutation({
     mutationFn: async (pin: string) => {
       if (pin.length !== 6) {
-        alert("PIN harus terdiri dari 6 digit.");
-        return false;
+        throw new Error("PIN harus terdiri dari 6 digit.");
       }
-      return await login(21, "ADMIN", pin);
+
+      const isSuccess = await login(26, "ADMIN", pin);
+
+      if (!isSuccess) {
+        throw new Error("PIN Salah! Silakan coba lagi.");
+      }
+
+      return isSuccess;
     },
+
     onSuccess: () => {
+      toast.success("Login berhasil!");
       navigate("/admin");
     },
+
     onError: (error: Error) => {
-      alert("Kesalahan saat login:" + error.message);
+      toast.error(error.message);
     },
   });
 

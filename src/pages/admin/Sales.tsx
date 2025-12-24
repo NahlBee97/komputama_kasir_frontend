@@ -5,6 +5,8 @@ import { getOrders } from "../../services/orderServices";
 import type { Order } from "../../interfaces/orderInterface";
 import Loader from "../../components/Loader";
 import { useMemo, useState } from "react";
+import { getAllUsers } from "../../services/userServices";
+import type { User } from "../../interfaces/authInterfaces";
 
 const GLOW_TEXT = "0 0 8px rgba(249, 249, 6, 0.7)";
 const GLOW_BORDER_SUBTLE = "0 0 5px rgba(249, f9f9, 6, 0.3)";
@@ -27,14 +29,23 @@ const Sales = () => {
   const [startDate, setStartDate] = useState<string>(formatDate(now));
   const [endDate, setEndDate] = useState<string>(formatDate(now));
 
+  const [selectedUserId, setSelectedUserId] = useState<number | undefined>(
+    undefined
+  );
+
+  const { data: users = [], isLoading: isLoadingUsers } = useQuery({
+    queryKey: ["users"],
+    queryFn: getAllUsers,
+  });
+
   // 2. Update useQuery to include dates and page in the queryKey and queryFn
   const {
     data: queryResult, // Change name to queryResult to hold totalCount and orders
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["orders", startDate, endDate, page], // Key must change to refetch on date/page change
-    queryFn: () => getOrders(startDate, endDate, page), // Pass the state to the service function
+    queryKey: ["orders", startDate, endDate, page, selectedUserId], // Key must change to refetch on date/page change
+    queryFn: () => getOrders(startDate, endDate, page, selectedUserId), // Pass the state to the service function
     // Keep data fresh for 5 minutes (optional)
     staleTime: 1000 * 60 * 5,
   });
@@ -62,6 +73,12 @@ const Sales = () => {
     }
   };
 
+  const handleUserChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const val = e.target.value;
+    // Logika: Jika value kosong, set undefined (tampilkan semua), jika ada angka set Number
+    setSelectedUserId(val ? Number(val) : undefined);
+  };
+
   return (
     <main className="flex-1 flex flex-col z-10 px-4 py-8 md:px-10">
       <div className="layout-content-container flex flex-col w-full max-w-7xl mx-auto flex-1 h-full">
@@ -73,6 +90,25 @@ const Sales = () => {
           >
             RIWAYAT PENJUALAN
           </h1>
+          {/* Cashier Selection */}
+          <div className="flex flex-col justify-center items-center gap-2 mb-2">
+            <select
+              id="cashier-select"
+              className="mb-4 p-2 border border-black rounded w-full"
+              onChange={handleUserChange}
+            >
+              <option value="">
+                {isLoadingUsers
+                  ? "Memuat data kasir..."
+                  : "Pilih Petugas Kasir"}
+              </option>
+              {users.map((user: User) => (
+                <option key={user.id} value={user.id}>
+                  {user.name}
+                </option>
+              ))}
+            </select>
+          </div>
         </header>
 
         {/* Filters Bar */}

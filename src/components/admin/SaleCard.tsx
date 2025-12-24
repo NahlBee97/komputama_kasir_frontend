@@ -16,7 +16,7 @@ const SaleCard = ({ order }: { order: Order }) => {
     >
       <div className="w-1/4 text-white font-medium">#{order.id}</div>
       <div className="w-1/4 text-[#f9f906]/80">
-        {format(order.createdAt, "dd MMMM yyy")}
+        {format(order.createdAt, "dd MMM yyy HH:mm")}
       </div>
       <div className="w-1/4 text-white font-semibold">
         {formatCurrency(order.totalAmount)}

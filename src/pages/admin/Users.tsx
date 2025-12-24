@@ -9,12 +9,11 @@ import {
 
 import { GLOW_BORDER, GLOW_TEXT } from "./Dashboard";
 // Make sure to update your productServices file
-import { deleteProduct } from "../../services/productServices";
 import Loader from "../../components/Loader";
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { User } from "../../interfaces/authInterfaces";
-import { getAllUsers } from "../../services/userServices";
+import { deleteUser, getAllUsers } from "../../services/userServices";
 
 const Users = () => {
   const navigate = useNavigate();
@@ -33,7 +32,7 @@ const Users = () => {
 
   const { mutate: deleteItem, isPending: deletePending } = useMutation({
     mutationFn: async (id: number) => {
-      return deleteProduct(id);
+      return deleteUser(id);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["users"] });
@@ -46,8 +45,9 @@ const Users = () => {
 
   const filteredItems: User[] = useMemo(() => {
     return users.length > 0 && searchQuery
-      ? users.filter((user: User) =>
-          user.name.toLowerCase().includes(searchQuery.toLowerCase())
+      ? users.filter(
+          (user: User) =>
+            user.name.toLowerCase().includes(searchQuery.toLowerCase())
         )
       : users;
   }, [searchQuery, users]);

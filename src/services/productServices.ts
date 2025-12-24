@@ -26,10 +26,10 @@ export const getLowStockProducts = async () => {
   }
 };
 
-export const getTopProducts = async (start: string, end: string) => {
+export const getTopProducts = async (start: string, end: string, userId?: number) => {
   try {
     const response = await api.get("/api/products/top", {
-      params: { start, end },
+      params: { start, end, userId },
     });
     return response.data.products;
   } catch (error) {

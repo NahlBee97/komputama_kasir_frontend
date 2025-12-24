@@ -1,6 +1,8 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes } from "react-router-dom"; // Added Navigate
 import { AuthProvider } from "./components/AuthProvider";
+import { Toaster } from "react-hot-toast";
+
 import Login from "./pages/Login";
 import ProtectedRoute from "./components/ProtectedRoute";
 import CashierLayout from "./layouts/CashierLayout";
@@ -21,12 +23,13 @@ const queryClient = new QueryClient();
 const App = () => {
   return (
     <BrowserRouter>
+      <Toaster position="top-right" reverseOrder={false} />
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
           <Routes>
             <Route element={<CashierLayout />}>
               <Route path="/" element={<Login />} />
-              <Route path="/admin/login" element={<AdminLogin />} />
+              <Route path="/login" element={<AdminLogin />} />
               <Route element={<ProtectedRoute />}>
                 <Route path="/pos" element={<Pos />} />
               </Route>

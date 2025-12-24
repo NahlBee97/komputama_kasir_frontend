@@ -10,9 +10,9 @@ export async function createOrder(orderData: NewOrder) {
   }
 }
 
-export async function getTodayOrders() {
+export async function getTodayOrders(userId?: number) {
   try {
-    const response = await api.get("/api/orders/today");
+    const response = await api.get(userId ? `/api/orders/today/${userId}` : `/api/orders/today`);
     return response.data.orders;
   } catch (error) {
     console.error("Error get today's order:", error);
@@ -23,7 +23,8 @@ export async function getTodayOrders() {
 export const getOrders = async (
   start: string,
   end: string,
-  page: number
+  page: number,
+  userId?: number
 ) => {
   try {
     // 2. Axios automatically handles parameter encoding using the 'params' property
@@ -32,6 +33,7 @@ export const getOrders = async (
         start: start,
         end: end,
         page: page.toString(), // Ensure page is a string for the query parameter
+        userId: userId?.toString(), // Include userId if provided
       },
     });
 
@@ -49,11 +51,12 @@ export const getOrders = async (
 
 export const getOrderSummary = async (
   start: string,
-  end: string
+  end: string,
+  userId?: number
 ) => {
   try {
     const response = await api.get("/api/orders/summary", {
-      params: { start, end },
+      params: { start, end, userId },
     });
     return response.data.summary;
   } catch (error) {

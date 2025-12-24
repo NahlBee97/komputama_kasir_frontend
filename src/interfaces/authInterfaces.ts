@@ -6,6 +6,7 @@ export interface User {
   name: string;
   shift: Shift;
   role: Role;
+  isActive?: boolean;
 }
 
 

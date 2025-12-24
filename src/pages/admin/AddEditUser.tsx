@@ -64,7 +64,7 @@ const AddEditUser = () => {
     initialValues: {
       name: mode === "edit" ? user?.name : "",
       pin: mode === "edit" ? user?.pin : "",
-      shift: mode === "edit" ? user?.shift : shifts[0],
+      shift: mode === "edit" ? user?.shift === "DAY" ? "Siang" : "Malam" : shifts[0],
     },
     validationSchema: mode === "edit" ? editUserSchema : userSchema,
     // ⭐️ CHANGE: Updated onSubmit to use FormData and include the file
