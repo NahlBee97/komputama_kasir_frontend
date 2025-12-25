@@ -20,39 +20,34 @@ import { useAuth } from "../../hooks/useAuth";
 export const CartProvider = ({ children }: { children: ReactNode }) => {
   const { user } = useAuth();
 
-  // 1. LOCAL STATE (Replacing useQuery)
+  // 1. LOCAL STATE
   const [cartData, setCartData] = useState<Cart | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<Error | null>(null);
 
-  // 2. FETCH CART INITIAL DATA
-  useEffect(() => {
-    let isMounted = true;
+  // 2. NEW: REFRESH CART METHOD (Extracted for reusability)
+  const refreshCart = useCallback(async () => {
+    if (!user) {
+      setCartData(null);
+      return;
+    }
 
-    const fetchCart = async () => {
-      if (!user) {
-        setCartData(null);
-        return;
-      }
-
-      setIsLoading(true);
-      try {
-        const data = await getUserCart();
-        if (isMounted) setCartData(data);
-      } catch (error) {
-        if (isMounted) setError(error as Error);
-        console.error("Failed to fetch cart", error);
-      } finally {
-        if (isMounted) setIsLoading(false);
-      }
-    };
-
-    fetchCart();
-
-    return () => {
-      isMounted = false;
-    };
+    setIsLoading(true);
+    try {
+      const data = await getUserCart();
+      setCartData(data);
+    } catch (error) {
+      setError(error as Error);
+      console.error("Failed to fetch cart", error);
+    } finally {
+      setIsLoading(false);
+    }
   }, [user]);
+
+  // 3. FETCH CART INITIAL DATA (Uses the method above)
+  useEffect(() => {
+    refreshCart();
+  }, [refreshCart]);
 
   // Derived state
   const cartItems = useMemo(() => cartData?.items || [], [cartData]);
@@ -67,20 +62,14 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     [cartItems]
   );
 
-  // 3. MANUAL OPTIMISTIC UPDATE: ADD ITEM
+  // 4. MANUAL OPTIMISTIC UPDATE: ADD ITEM
   const addToCart = useCallback(
     async (product: Product) => {
-      // A. Snapshot previous state
       const prevCart = cartData;
 
-      // B. Optimistically update UI
+      // Optimistic Update
       setCartData((oldCart) => {
-        // Handle case where cart doesn't exist yet
-        if (!oldCart) {
-          // Create a temporary mock structure if needed, or wait for server.
-          // Usually better to wait if no cart exists, but assuming structure:
-          return oldCart;
-        }
+        if (!oldCart) return oldCart;
 
         const existingItem = oldCart.items.find(
           (item) => item.product.id === product.id
@@ -89,16 +78,14 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         let newItems: CartItem[];
 
         if (existingItem) {
-          // Increment quantity locally
           newItems = oldCart.items.map((item) =>
             item.product.id === product.id
               ? { ...item, quantity: item.quantity + 1 }
               : item
           );
         } else {
-          // Add new item with temp ID so UI renders it immediately
           const newItem: CartItem = {
-            id: Date.now(), // Temp ID
+            id: Date.now(),
             cartId: oldCart.id,
             productId: product.id,
             quantity: 1,
@@ -111,32 +98,25 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       });
 
       try {
-        // C. Call API
-        // Assuming API returns the updated Cart or the new CartItem
-        // It is best to reload the cart or use the response to ensure IDs are correct
         await addItemToCart(product.id, 1);
-
-        // Refresh with real data to replace Temp IDs with Real IDs
+        // Refresh to ensure IDs and data are synced with server
         const updatedCart = await getUserCart();
         setCartData(updatedCart);
       } catch (error) {
         console.error("Add failed", error);
         toast.error("Gagal menyimpan");
-        // D. Rollback on error
         setCartData(prevCart);
       }
     },
     [cartData]
   );
 
-  // 4. MANUAL OPTIMISTIC UPDATE: UPDATE QUANTITY
+  // 5. MANUAL OPTIMISTIC UPDATE: UPDATE QUANTITY
   const updateItem = useCallback(
     async (itemId: number, quantity: number) => {
       if (quantity < 1) return;
-
       const prevCart = cartData;
 
-      // Optimistic UI update
       setCartData((oldCart) => {
         if (!oldCart) return oldCart;
         return {
@@ -149,8 +129,6 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
       try {
         await updateItemQuantity(itemId, quantity);
-        // We don't necessarily need to refetch here if we trust the logic,
-        // but fetching ensures consistency.
       } catch (error) {
         console.error("Update failed", error);
         toast.error("Gagal update");
@@ -160,12 +138,11 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     [cartData]
   );
 
-  // 5. MANUAL OPTIMISTIC UPDATE: REMOVE ITEM
+  // 6. MANUAL OPTIMISTIC UPDATE: REMOVE ITEM
   const removeFromCart = useCallback(
     async (itemId: number) => {
       const prevCart = cartData;
 
-      // Optimistic UI update
       setCartData((oldCart) => {
         if (!oldCart) return oldCart;
         return {
@@ -195,6 +172,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       addToCart,
       removeFromCart,
       updateItem,
+      refreshCart, // <--- Exposed here
       isLoading,
       isError: !!error,
     }),
@@ -205,6 +183,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       addToCart,
       removeFromCart,
       updateItem,
+      refreshCart,
       isLoading,
       error,
     ]
