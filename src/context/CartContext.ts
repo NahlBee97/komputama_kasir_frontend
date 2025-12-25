@@ -9,6 +9,7 @@ export interface CartContextType {
   addToCart: (product: Product) => void;
   removeFromCart: (cartItemId: number) => void;
   updateItem: (itemId: number, quantity: number) => void;
+  refreshCart: () => Promise<void>; // <--- Added this
   isLoading: boolean;
   isError: boolean;
 }

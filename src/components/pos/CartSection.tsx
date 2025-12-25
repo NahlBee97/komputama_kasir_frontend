@@ -1,4 +1,4 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import type { CartItem } from "../../interfaces/cartInterfaces";
 import Loader from "../Loader";
 import EmptyCart from "./EmptyCart";
@@ -18,13 +18,12 @@ const CartSection = () => {
   // 1. Use values from Context
   const {
     cart,
-    cartItems, // Use this for UI list (it's the optimistic source of truth)
+    cartItems,
     isLoading: isCartLoading,
     totalAmount,
     isError: isCartError,
+    refreshCart,
   } = useCart();
-
-  const queryClient = useQueryClient();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -38,9 +37,9 @@ const CartSection = () => {
   // 2. Automated Print Logic
   useEffect(() => {
     if (receiptData && receiptData.order?.id) {
-      // Small delay to ensure DOM is rendered before print dialog opens
       const timer = setTimeout(() => {
         window.print();
+        setReceiptData(null);
       }, 500);
       return () => clearTimeout(timer);
     }
@@ -52,19 +51,17 @@ const CartSection = () => {
     mutationFn: async (orderData: NewOrder) => {
       return createOrder(orderData);
     },
-    onSuccess: (data) => {
-      // A. Set receipt data to trigger the print effect
+    onSuccess: async (data) => {
+      // A. Set receipt data FIRST to ensure it exists in DOM
       setReceiptData(data);
 
-      // B. Hard refresh the cart to clear it
-      queryClient.invalidateQueries({
-        queryKey: ["cart"],
-        refetchType: "all",
-      });
-
-      // C. Close modal
+      // B. Close modal
       setIsModalOpen(false);
+
       toast.success("Pembayaran Berhasil!");
+
+      // C. Refresh cart (this will empty the cartItems)
+      await refreshCart();
     },
     onError: (error: Error) => {
       toast.error("Gagal memproses pembayaran: " + error.message);
@@ -72,25 +69,19 @@ const CartSection = () => {
   });
 
   const handleConfirmPayment = (cashReceived: number, change: number) => {
-    // 4. Safety check: Ensure we have a User ID
     if (!cart?.userId) {
       toast.error("Data User tidak valid. Silakan refresh.");
       return;
     }
 
-    try {
-      const orderData: NewOrder = {
-        userId: cart.userId,
-        totalAmount: totalAmount,
-        paymentCash: cashReceived,
-        paymentChange: change,
-      };
+    const orderData: NewOrder = {
+      userId: cart.userId,
+      totalAmount: totalAmount,
+      paymentCash: cashReceived,
+      paymentChange: change,
+    };
 
-      checkout(orderData);
-    } catch (error) {
-      console.error("Payment confirmation error:", error);
-    }
-    // Note: Don't close modal here, wait for onSuccess or onError
+    checkout(orderData);
   };
 
   // --- RENDER STATES ---
@@ -115,8 +106,10 @@ const CartSection = () => {
     );
   }
 
-  // 5. Use cartItems.length (Safe array from context)
-  if (!cartItems || cartItems.length === 0) {
+  // 4. CRITICAL FIX:
+  // Do not show "EmptyCart" if we are currently trying to print a receipt (receiptData exists).
+  // This keeps the DOM mounted so window.print() can see the Receipt component.
+  if (!receiptData && (!cartItems || cartItems.length === 0)) {
     return <EmptyCart />;
   }
 
@@ -129,6 +122,7 @@ const CartSection = () => {
 
       {/* List Items (Scrollable) */}
       <div className="flex-1 min-h-0 px-2 overflow-y-auto scrollbar-thin scrollbar-thumb-black/30 scrollbar-track-transparent hover:scrollbar-thumb-black/50">
+        {/* Handle case where we have receiptData but cart is empty (prevent crash map) */}
         {cartItems.map((item: CartItem) => (
           <div
             key={item.id}
@@ -152,14 +146,14 @@ const CartSection = () => {
 
         <button
           onClick={() => setIsModalOpen(true)}
-          disabled={isPending || isCartLoading}
+          disabled={isPending || isCartLoading || cartItems.length === 0}
           className="group w-full bg-black text-white text-lg font-black py-4 rounded-full 
-                     shadow-[4px_4px_0px_0px_rgba(0,0,0,0.2)] 
-                     hover:shadow-none hover:translate-y-0.5 
-                     active:scale-[0.98] active:translate-y-0.5
-                     transition-all duration-200 ease-out 
-                     uppercase tracking-widest border border-black
-                     disabled:bg-gray-300 disabled:shadow-none disabled:border-gray-300 disabled:cursor-not-allowed"
+                      shadow-[4px_4px_0px_0px_rgba(0,0,0,0.2)] 
+                      hover:shadow-none hover:translate-y-0.5 
+                      active:scale-[0.98] active:translate-y-0.5
+                      transition-all duration-200 ease-out 
+                      uppercase tracking-widest border border-black
+                      disabled:bg-gray-300 disabled:shadow-none disabled:border-gray-300 disabled:cursor-not-allowed"
         >
           {isPending ? "MEMPROSES..." : "BAYAR SEKARANG"}
         </button>
@@ -173,7 +167,8 @@ const CartSection = () => {
         onConfirm={handleConfirmPayment}
       />
 
-      {/* Only render receipt if data exists */}
+      {/* 5. RECEIPT COMPONENT */}
+      {/* This must be present in the DOM when window.print() triggers */}
       {receiptData && <Receipt data={receiptData} />}
 
       <LoadingModal isOpen={isPending} message="Memproses Pembayaran..." />
