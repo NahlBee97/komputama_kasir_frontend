@@ -48,11 +48,11 @@ const ProductSection = ({
   }, [products, searchQuery, activeCategory]);
 
   const handleProductClick = (product: Product) => {
-    const isProductExist = cartItems.some((item) => item.id === product.id);
-    if (isProductExist) {
+    const existItme = cartItems.find((item) => item.product.id === product.id);
+    if (existItme) {
       updateItem(
-        product.id,
-        cartItems.find((item) => item.id === product.id)!.quantity + 1
+        existItme.id,
+        existItme.quantity + 1
       );
     } else {
       addToCart(product);

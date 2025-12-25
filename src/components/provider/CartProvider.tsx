@@ -1,4 +1,10 @@
-import { useMemo, type ReactNode } from "react";
+import {
+  useMemo,
+  type ReactNode,
+  useState,
+  useEffect,
+  useCallback,
+} from "react";
 import type { Cart, CartItem } from "../../interfaces/cartInterfaces";
 import {
   addItemToCart,
@@ -9,59 +15,72 @@ import {
 import type { Product } from "../../interfaces/productInterfaces";
 import toast from "react-hot-toast";
 import { CartContext } from "../../context/CartContext";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "../../hooks/useAuth";
 
-// Define the data type for updates
-interface UpdateItemData {
-  itemId: number;
-  quantity: number;
-}
-
 export const CartProvider = ({ children }: { children: ReactNode }) => {
-  const {user} = useAuth();
-  const queryClient = useQueryClient();
+  const { user } = useAuth();
 
-  // 1. FETCH CART
-  // We read directly from data. We do NOT use useState/useEffect here.
-  const {
-    data: cartData,
-    isLoading,
-    error,
-  } = useQuery({
-    queryKey: ["cart", user?.id],
-    queryFn: getUserCart,
-    enabled: !!user, // Only run if user is logged in
-  });
+  // 1. LOCAL STATE (Replacing useQuery)
+  const [cartData, setCartData] = useState<Cart | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<Error | null>(null);
 
-  // Derived state (calculated on the fly, no useState needed)
+  // 2. FETCH CART INITIAL DATA
+  useEffect(() => {
+    let isMounted = true;
+
+    const fetchCart = async () => {
+      if (!user) {
+        setCartData(null);
+        return;
+      }
+
+      setIsLoading(true);
+      try {
+        const data = await getUserCart();
+        if (isMounted) setCartData(data);
+      } catch (error) {
+        if (isMounted) setError(error as Error);
+        console.error("Failed to fetch cart", error);
+      } finally {
+        if (isMounted) setIsLoading(false);
+      }
+    };
+
+    fetchCart();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [user]);
+
+  // Derived state
   const cartItems = useMemo(() => cartData?.items || [], [cartData]);
 
   const totalAmount = useMemo(
     () =>
       cartItems.reduce(
-        (sum: number, item: CartItem) => sum + item.product.price * item.quantity,
+        (sum: number, item: CartItem) =>
+          sum + item.product.price * item.quantity,
         0
       ),
     [cartItems]
   );
 
-  // 2. ADD ITEM MUTATION
-  const { mutate: addToCartMutation } = useMutation({
-    mutationFn: async (product: Product) => {
-      // Assuming your API returns the updated Cart or CartItem
-      return await addItemToCart(product.id, 1);
-    },
-    onMutate: async (product) => {
-      // A. Cancel outgoing refetches
-      await queryClient.cancelQueries({ queryKey: ["cart"] });
+  // 3. MANUAL OPTIMISTIC UPDATE: ADD ITEM
+  const addToCart = useCallback(
+    async (product: Product) => {
+      // A. Snapshot previous state
+      const prevCart = cartData;
 
-      // B. Snapshot previous value
-      const previousCart = queryClient.getQueryData<Cart>(["cart"]);
-
-      // C. Optimistically update the CACHE directly
-      queryClient.setQueryData<Cart>(["cart"], (oldCart) => {
-        if (!oldCart) return oldCart;
+      // B. Optimistically update UI
+      setCartData((oldCart) => {
+        // Handle case where cart doesn't exist yet
+        if (!oldCart) {
+          // Create a temporary mock structure if needed, or wait for server.
+          // Usually better to wait if no cart exists, but assuming structure:
+          return oldCart;
+        }
 
         const existingItem = oldCart.items.find(
           (item) => item.product.id === product.id
@@ -70,16 +89,16 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         let newItems: CartItem[];
 
         if (existingItem) {
-          // Increment quantity
+          // Increment quantity locally
           newItems = oldCart.items.map((item) =>
             item.product.id === product.id
               ? { ...item, quantity: item.quantity + 1 }
               : item
           );
         } else {
-          // Add new item with temp ID
+          // Add new item with temp ID so UI renders it immediately
           const newItem: CartItem = {
-            id: Math.random(), // Temp ID
+            id: Date.now(), // Temp ID
             cartId: oldCart.id,
             productId: product.id,
             quantity: 1,
@@ -91,104 +110,91 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         return { ...oldCart, items: newItems };
       });
 
-      // D. Return context
-      return { previousCart };
-    },
-    onError: (err, _newTodo, context) => {
-      console.error("Add failed", err);
-      toast.error("Gagal menyimpan");
-      if (context?.previousCart) {
-        queryClient.setQueryData(["cart"], context.previousCart);
+      try {
+        // C. Call API
+        // Assuming API returns the updated Cart or the new CartItem
+        // It is best to reload the cart or use the response to ensure IDs are correct
+        await addItemToCart(product.id, 1);
+
+        // Refresh with real data to replace Temp IDs with Real IDs
+        const updatedCart = await getUserCart();
+        setCartData(updatedCart);
+      } catch (error) {
+        console.error("Add failed", error);
+        toast.error("Gagal menyimpan");
+        // D. Rollback on error
+        setCartData(prevCart);
       }
     },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["cart"] });
-    },
-  });
+    [cartData]
+  );
 
-  // 3. UPDATE ITEM QUANTITY MUTATION
-  const { mutate: updateItemMutation } = useMutation({
-    mutationFn: async (data: UpdateItemData) => {
-      return await updateItemQuantity(data.itemId, data.quantity);
-    },
-    onMutate: async (data) => {
-      await queryClient.cancelQueries({ queryKey: ["cart"] });
-      const previousCart = queryClient.getQueryData<Cart>(["cart"]);
+  // 4. MANUAL OPTIMISTIC UPDATE: UPDATE QUANTITY
+  const updateItem = useCallback(
+    async (itemId: number, quantity: number) => {
+      if (quantity < 1) return;
 
-      queryClient.setQueryData<Cart>(["cart"], (oldCart) => {
+      const prevCart = cartData;
+
+      // Optimistic UI update
+      setCartData((oldCart) => {
         if (!oldCart) return oldCart;
         return {
           ...oldCart,
           items: oldCart.items.map((item) =>
-            item.id === data.itemId
-              ? { ...item, quantity: data.quantity }
-              : item
+            item.id === itemId ? { ...item, quantity } : item
           ),
         };
       });
 
-      return { previousCart };
-    },
-    onError: (error, _variables, context) => {
-      console.error("Update failed", error);
-      toast.error("Gagal update");
-      if (context?.previousCart) {
-        queryClient.setQueryData(["cart"], context.previousCart);
+      try {
+        await updateItemQuantity(itemId, quantity);
+        // We don't necessarily need to refetch here if we trust the logic,
+        // but fetching ensures consistency.
+      } catch (error) {
+        console.error("Update failed", error);
+        toast.error("Gagal update");
+        setCartData(prevCart);
       }
     },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["cart"] });
-    },
-  });
+    [cartData]
+  );
 
-  // 4. REMOVE ITEM MUTATION
-  const { mutate: removeFromCartMutation } = useMutation({
-    mutationFn: async (data: { itemId: number }) => {
-      return await removeItemFromCart(data.itemId);
-    },
-    onMutate: async (data) => {
-      await queryClient.cancelQueries({ queryKey: ["cart"] });
-      const previousCart = queryClient.getQueryData<Cart>(["cart"]);
+  // 5. MANUAL OPTIMISTIC UPDATE: REMOVE ITEM
+  const removeFromCart = useCallback(
+    async (itemId: number) => {
+      const prevCart = cartData;
 
-      queryClient.setQueryData<Cart>(["cart"], (oldCart) => {
+      // Optimistic UI update
+      setCartData((oldCart) => {
         if (!oldCart) return oldCart;
         return {
           ...oldCart,
-          items: oldCart.items.filter((item) => item.id !== data.itemId),
+          items: oldCart.items.filter((item) => item.id !== itemId),
         };
       });
 
-      return { previousCart };
-    },
-    onSuccess: () => {
-      toast.success("Item dihapus");
-    },
-    onError: (error, _variables, context) => {
-      console.error("Remove failed", error);
-      toast.error("Gagal menghapus");
-      if (context?.previousCart) {
-        queryClient.setQueryData(["cart"], context.previousCart);
+      try {
+        await removeItemFromCart(itemId);
+        toast.success("Item dihapus");
+      } catch (error) {
+        console.error("Remove failed", error);
+        toast.error("Gagal menghapus");
+        setCartData(prevCart);
       }
     },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["cart"] });
-    },
-  });
+    [cartData]
+  );
 
   // --- MEMOIZED CONTEXT VALUE ---
-  // Prevents re-renders of all consumers when CartProvider renders,
-  // unless values actually change.
   const contextValue = useMemo(
     () => ({
       cart: cartData || ({} as Cart),
       cartItems,
       totalAmount,
-      addToCart: (product: Product) => addToCartMutation(product),
-      removeFromCart: (itemId: number) => removeFromCartMutation({ itemId }),
-      updateItem: (itemId: number, quantity: number) => {
-        if (quantity < 1) return;
-        updateItemMutation({ itemId, quantity });
-      },
+      addToCart,
+      removeFromCart,
+      updateItem,
       isLoading,
       isError: !!error,
     }),
@@ -196,11 +202,11 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       cartData,
       cartItems,
       totalAmount,
+      addToCart,
+      removeFromCart,
+      updateItem,
       isLoading,
       error,
-      addToCartMutation,
-      removeFromCartMutation,
-      updateItemMutation,
     ]
   );
 
