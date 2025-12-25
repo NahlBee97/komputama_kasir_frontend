@@ -37,13 +37,14 @@ const CartSection = () => {
   // 2. Automated Print Logic
   useEffect(() => {
     if (receiptData && receiptData.order?.id) {
-      const timer = setTimeout(() => {
+      const timer = setTimeout(async () => {
         window.print();
         setReceiptData(null);
+        await refreshCart();
       }, 500);
       return () => clearTimeout(timer);
     }
-  }, [receiptData]);
+  }, [receiptData, refreshCart]);
 
   // 3. Checkout Mutation
   const { mutate: checkout, isPending } = useMutation({
@@ -52,16 +53,11 @@ const CartSection = () => {
       return createOrder(orderData);
     },
     onSuccess: async (data) => {
-      // A. Set receipt data FIRST to ensure it exists in DOM
       setReceiptData(data);
 
-      // B. Close modal
       setIsModalOpen(false);
 
       toast.success("Pembayaran Berhasil!");
-
-      // C. Refresh cart (this will empty the cartItems)
-      await refreshCart();
     },
     onError: (error: Error) => {
       toast.error("Gagal memproses pembayaran: " + error.message);
