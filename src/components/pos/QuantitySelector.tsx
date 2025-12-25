@@ -1,70 +1,36 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { CartItem } from "../../interfaces/cartInterfaces";
 import { MinusIcon, PlusIcon } from "../Icons";
-import {
-  removeItemFromCart,
-  updateItemQuantity,
-} from "../../services/cartServices";
-import { useEffect, useState } from "react";
-
-interface updateItemData {
-  itemId: number;
-  quantity: number;
-}
+import { useState } from "react";
+import { formatCurrency } from "../../helper/formatCurrentcy";
+import ConfirmModal from "../ConfirmModal";
+import { useCart } from "../../hooks/useCart";
 
 interface QuantitySelectorProps {
   item: CartItem;
 }
 
 const QuantitySelector = ({ item }: QuantitySelectorProps) => {
-  const queryClient = useQueryClient();
+  // 1. Use the new updateItem function from context
+  const { updateItem, removeFromCart, isLoading } = useCart();
+  const [isConfirmOpen, setIsConfirmOpen] = useState<boolean>(false);
 
-  const [debouncedQty, setDebouncedQty] = useState<number>(item.quantity);
-
-  const { mutate: updateItem, isPending } = useMutation({
-    mutationFn: (data: updateItemData) => {
-      return updateItemQuantity(data.itemId, data.quantity);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["cart"] });
-    },
-    onError: (error) => {
-      alert("Error: " + error);
-    },
-  });
-
-  const { mutate: deleteItem, isPending: isDeleting } = useMutation({
-    mutationFn: (data: { itemId: number }) => {
-      return removeItemFromCart(data.itemId);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["cart"] });
-    },
-    onError: (error) => {
-      alert("Error: " + error);
-    },
-  });
-
-  useEffect(() => {
-    if (debouncedQty === item.quantity) return;
-
-    const timer = setTimeout(() => {
-      updateItem({ itemId: item.id, quantity: debouncedQty });
-    }, 1000); // 1000ms (1s)
-
-    return () => clearTimeout(timer);
-    // eslint-disable-next-line
-  }, [debouncedQty]);
-
+  // 2. Logic for Minus Button
   const handleClickMinus = () => {
-    if (debouncedQty > 1) {
-      setDebouncedQty((prev) => (prev > 1 ? prev - 1 : 1));
-    } else if (debouncedQty === 1 && item.quantity === 1) {
-      deleteItem({ itemId: item.id });
+    if (item.quantity > 1) {
+      // Direct call: Context handles the instant UI update
+      updateItem(item.id, item.quantity - 1);
+    } else {
+      // If quantity is 1, ask to remove
+      setIsConfirmOpen(true);
     }
   };
 
-  // Shared button class for consistency
+  // 3. Logic for Plus Button
+  const handleClickPlus = () => {
+    updateItem(item.id, item.quantity + 1);
+  };
+
+  // Shared button class
   const buttonClass = `
     group flex h-7 w-7 items-center justify-center rounded-full 
     border border-black bg-white text-black 
@@ -75,28 +41,46 @@ const QuantitySelector = ({ item }: QuantitySelectorProps) => {
   `;
 
   return (
-    <div className="flex items-center gap-3">
-      <button
-        onClick={handleClickMinus}
-        disabled={isPending || isDeleting}
-        className={buttonClass}
-        aria-label="Decrease quantity"
-      >
-        <MinusIcon />
-      </button>
+    <div className="flex flex-col items-end gap-2">
+      <div className="flex items-center gap-3">
+        <button
+          onClick={handleClickMinus}
+          disabled={isLoading}
+          className={buttonClass}
+          aria-label="Decrease quantity"
+        >
+          <MinusIcon />
+        </button>
 
-      <span className="min-w-5 text-center text-base font-black text-black">
-        {debouncedQty}
-      </span>
+        {/* 4. Display item.quantity directly (Source of Truth) */}
+        <span className="min-w-5 text-center text-base font-black text-black">
+          {item.quantity}
+        </span>
 
-      <button
-        onClick={() => setDebouncedQty((prev) => prev + 1)}
-        disabled={isPending}
-        className={buttonClass}
-        aria-label="Increase quantity"
-      >
-        <PlusIcon />
-      </button>
+        <button
+          onClick={handleClickPlus}
+          disabled={isLoading}
+          className={buttonClass}
+          aria-label="Increase quantity"
+        >
+          <PlusIcon />
+        </button>
+      </div>
+
+      <p className="text-black text-base font-black">
+        {formatCurrency(item.product.price * item.quantity)}
+      </p>
+
+      <ConfirmModal
+        isOpen={isConfirmOpen}
+        title="Hapus Item"
+        message="Apakah Anda yakin ingin menghapus item ini dari keranjang?"
+        onConfirm={() => {
+          removeFromCart(item.id);
+          setIsConfirmOpen(false);
+        }}
+        onCancel={() => setIsConfirmOpen(false)}
+      />
     </div>
   );
 };

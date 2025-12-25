@@ -118,13 +118,7 @@ const ProductTable = ({ products, isLoading, isError }: props) => {
             </td>
             <td className="p-4 text-center">
               <StatusBadge
-                status={
-                  product.stock < 10
-                    ? product.stock === 0
-                      ? "Habis"
-                      : "Rendah"
-                    : "Cukup"
-                }
+                stock={product.stock}
               />
             </td>
             <td className="p-4">

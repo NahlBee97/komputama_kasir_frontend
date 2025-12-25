@@ -1,9 +1,9 @@
 import { useState, type ReactNode } from "react";
-import { AuthContext } from "../context/AuthContext";
+import { AuthContext } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
-import api from "../lib/axios";
+import api from "../../lib/axios";
 import { jwtDecode } from "jwt-decode";
-import type { User } from "../interfaces/authInterfaces";
+import type { User } from "../../interfaces/authInterfaces";
 
 interface AuthProviderProps {
   children: ReactNode;

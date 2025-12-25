@@ -1,31 +1,17 @@
-const StatusBadge = ({ status }: { status: string }) => {
-  const normalizedStatus = status.toLowerCase();
-
+const StatusBadge = ({ stock }: { stock: number }) => {
   let styles = "";
+  let status = "";
 
-  // Logic for B&W Theme:
-  // 1. Cukup (Good) -> Solid Black (Strongest visual)
-  // 2. Rendah (Warning) -> Outlined (Standard)
-  // 3. Habis (Critical) -> Dashed Border (Implies empty/broken)
-
-  if (normalizedStatus === "rendah" || normalizedStatus === "low") {
-    styles = "bg-white text-black border-2 border-black";
-  } else if (
-    normalizedStatus === "cukup" ||
-    normalizedStatus === "active" ||
-    normalizedStatus === "siang"
-  ) {
+  
+  if (stock > 10) {
     styles = "bg-black text-white border-2 border-black";
-  } else if (
-    normalizedStatus === "habis" ||
-    normalizedStatus === "out of stock" ||
-    normalizedStatus === "sangat rendah"
-  ) {
-    styles =
-      "bg-white text-black border-2 border-dashed border-black opacity-60";
-  } else {
-    // Default fallback
+    status = "Cukup";
+  } else if (stock > 0 && stock <= 10) {
     styles = "bg-white text-black border-2 border-black";
+    status = "Rendah";
+  } else {
+    styles ="bg-white text-black border-2 border-dashed border-black opacity-60";
+    status = "Habis";
   }
 
   return (

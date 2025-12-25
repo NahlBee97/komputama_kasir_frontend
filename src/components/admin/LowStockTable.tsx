@@ -1,6 +1,7 @@
 import type { Product } from "../../interfaces/productInterfaces";
-import { ErrorIcon, WarningIcon } from "../Icons";
+import { WarningIcon } from "../Icons";
 import Loader from "../Loader";
+import StatusBadge from "./StatusBadge";
 
 interface props {
   products: Product[];
@@ -86,25 +87,7 @@ const LowStockTable = ({ products, isLoading, isError }: props) => {
                 </td>
                 <td className="p-4 text-sm text-center">
                   <div className="flex items-center justify-center gap-2">
-                    {/* Conditional Styling for Critical vs Warning */}
-                    <span
-                      className={
-                        product.stock < 5
-                          ? "animate-pulse text-black"
-                          : "text-black/60"
-                      }
-                    >
-                      {product.stock < 5 ? <ErrorIcon /> : <WarningIcon />}
-                    </span>
-
-                    <span
-                      className={`text-xs font-black uppercase tracking-wider ${
-                        product.stock < 5 ? "text-red-600" : "text-black" // kept red for 'critical' logic, or change to "text-black underline" for pure B&W
-                      }`}
-                    >
-                      {/* Pure B&W Override: replace text-red-600 with text-black if strict monochrome is desired */}
-                      {product.stock < 5 ? "Sangat Rendah" : "Rendah"}
-                    </span>
+                    <StatusBadge stock={product.stock} />
                   </div>
                 </td>
               </tr>

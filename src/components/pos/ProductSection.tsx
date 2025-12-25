@@ -1,16 +1,11 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { getProducts } from "../../services/productServices";
 import { useMemo } from "react";
 import Loader from "../Loader";
 import ProductCard from "./ProductCard";
-import { addItemToCart } from "../../services/cartServices";
 import type { Product } from "../../interfaces/productInterfaces";
 import { WarningIcon } from "../Icons";
-
-interface AddItemData {
-  productId: number;
-  quantity: number;
-}
+import { useCart } from "../../hooks/useCart";
 
 interface ProductSectionProps {
   activeCategory: string;
@@ -21,7 +16,7 @@ const ProductSection = ({
   searchQuery,
   activeCategory,
 }: ProductSectionProps) => {
-  const queryClient = useQueryClient();
+  const { cartItems, addToCart, updateItem, isLoading } = useCart();
 
   const {
     data: queryResult,
@@ -30,18 +25,6 @@ const ProductSection = ({
   } = useQuery({
     queryKey: ["products"],
     queryFn: () => getProducts(1),
-  });
-
-  const { mutate: addItem, isPending } = useMutation({
-    mutationFn: (data: AddItemData) => {
-      return addItemToCart(data.productId, data.quantity);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["cart"] });
-    },
-    onError: (error) => {
-      alert("Error: " + error);
-    },
   });
 
   const products: Product[] = useMemo(
@@ -64,15 +47,23 @@ const ProductSection = ({
     });
   }, [products, searchQuery, activeCategory]);
 
+  const handleProductClick = (product: Product) => {
+    const isProductExist = cartItems.some((item) => item.id === product.id);
+    if (isProductExist) {
+      updateItem(
+        product.id,
+        cartItems.find((item) => item.id === product.id)!.quantity + 1
+      );
+    } else {
+      addToCart(product);
+    }
+  };
+
   // --- Loading / Error State ---
   if (isProductLoading || productError) {
     return (
       <div className="flex flex-col gap-4 w-full h-[50vh] items-center justify-center">
-        {productError ? (
-          <WarningIcon />
-        ) : (
-          <Loader size="lg" variant="dark" />
-        )}
+        {productError ? <WarningIcon /> : <Loader size="lg" variant="dark" />}
         <h3 className="text-black font-black uppercase tracking-widest text-sm">
           {productError ? "Gagal Memuat Data" : "Memuat Produk..."}
         </h3>
@@ -101,8 +92,8 @@ const ProductSection = ({
         <ProductCard
           key={item.id}
           item={item}
-          disabled={isPending}
-          onClick={() => addItem({ productId: item.id, quantity: 1 })}
+          disabled={isLoading}
+          onClick={handleProductClick}
         />
       ))}
     </div>
