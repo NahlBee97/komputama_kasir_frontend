@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import LoadingModal from "../components/LoadingModal";
 import toast from "react-hot-toast";
+import { adminId } from "../config";
 
 const AdminLogin = () => {
   const { user, login } = useAuth();
@@ -41,7 +42,7 @@ const AdminLogin = () => {
       }
 
       // Hardcoded Admin ID as per your snippet
-      const isSuccess = await login(37, "ADMIN", pin);
+      const isSuccess = await login(adminId, pin);
 
       if (!isSuccess) {
         throw new Error("PIN Salah! Silakan coba lagi.");

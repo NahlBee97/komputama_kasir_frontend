@@ -48,7 +48,7 @@ const Login = () => {
         throw new Error("PIN harus terdiri dari 6 digit.");
       }
 
-      const isSuccess = await login(selectedUserId!, "CASHIER", pin);
+      const isSuccess = await login(selectedUserId!, pin);
 
       if (!isSuccess) {
         throw new Error("PIN Salah! Silakan coba lagi.");
