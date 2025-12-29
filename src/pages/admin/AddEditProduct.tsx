@@ -20,6 +20,7 @@ import { useState, useEffect } from "react";
 import Loader from "../../components/Loader";
 import LoadingModal from "../../components/LoadingModal";
 import { handleApiError } from "../../utils/errorHandler";
+import toast from "react-hot-toast";
 
 const categories = ["Ayam Geprek", "Minuman", "Tambahan"];
 
@@ -57,6 +58,7 @@ const AddEditProduct = () => {
     },
     onSuccess: () => {
       navigate("/admin/products");
+      toast.success("Berhasil menambahkan produk");
     },
     onError: (error) => {
       handleApiError(error);
@@ -69,6 +71,7 @@ const AddEditProduct = () => {
     },
     onSuccess: () => {
       navigate("/admin/products");
+      toast.success("Berhasil mengedit produk");
     },
     onError: (error) => {
       handleApiError(error);
@@ -334,7 +337,12 @@ const AddEditProduct = () => {
             </form>
           )}
         </div>
-        <LoadingModal isOpen={isEditPending || isAddPending} message={mode === "add" ? "Menambahkan produk..." : "Mengedit produk..."}/>
+        <LoadingModal
+          isOpen={isEditPending || isAddPending}
+          message={
+            mode === "add" ? "Menambahkan produk..." : "Mengedit produk..."
+          }
+        />
       </div>
     </main>
   );

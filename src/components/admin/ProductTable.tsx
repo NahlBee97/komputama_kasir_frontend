@@ -4,38 +4,17 @@ import type { Product } from "../../interfaces/productInterfaces";
 import { DeleteIcon, EditIcon, WarningIcon } from "../Icons";
 import Loader from "../Loader";
 import StatusBadge from "./StatusBadge";
-import { deleteProduct } from "../../services/productServices";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import ConfirmModal from "../ConfirmModal";
-import { useState } from "react";
-import toast from "react-hot-toast";
-import LoadingModal from "../LoadingModal";
 
 interface props {
   products: Product[];
   isLoading: boolean;
   isError: boolean;
+  onDelete: (productId: number) => void;
 }
 
-const ProductTable = ({ products, isLoading, isError }: props) => {
+const ProductTable = ({ products, isLoading, isError, onDelete }: props) => {
   const navigate = useNavigate();
-  const queryClient = useQueryClient();
-
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-
-  const { mutate: deleteItem, isPending: deletePending } = useMutation({
-    mutationFn: async (id: number) => {
-      return deleteProduct(id);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["products"] });
-      toast.success("Berhasil menghapus produk");
-    },
-    onError: (error) => {
-      console.error("Error deleting product:", error);
-      toast.error("Gagal menghapus produk");
-    },
-  });
+  
 
   // 1. Loading / Error State
   if (isLoading || isError)
@@ -132,7 +111,7 @@ const ProductTable = ({ products, isLoading, isError }: props) => {
                     hover:bg-black hover:text-white 
                     transition-all duration-200
                   "
-                  disabled={deletePending}
+                  disabled={isLoading}
                   onClick={() => navigate(`/admin/products/edit/${product.id}`)}
                   title="Edit"
                 >
@@ -147,27 +126,18 @@ const ProductTable = ({ products, isLoading, isError }: props) => {
                     hover:bg-black hover:text-white 
                     transition-all duration-200
                   "
-                  disabled={deletePending}
-                  onClick={() => setIsModalOpen(true)}
+                  disabled={isLoading}
+                  onClick={() => onDelete(product.id)}
                   title="Delete"
                 >
                   <DeleteIcon />
                 </button>
-                <ConfirmModal
-                  isOpen={isModalOpen}
-                  message="Apakah Anda yakin ingin menghapus produk ini?"
-                  onCancel={() => setIsModalOpen(false)}
-                  onConfirm={() => {
-                    deleteItem(product.id);
-                    setIsModalOpen(false);
-                  }}
-                />
-                <LoadingModal isOpen={deletePending} message="Menghapus produk..."/>
               </div>
             </td>
           </tr>
         ))}
       </tbody>
+      
     </table>
   );
 };

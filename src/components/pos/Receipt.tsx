@@ -1,6 +1,8 @@
 import { forwardRef } from "react";
 import { formatCurrency } from "../../helper/formatCurrentcy";
 import type { Order, OrderItem } from "../../interfaces/orderInterface";
+import { format } from "date-fns";
+import { id } from "date-fns/locale";
 
 interface ReceiptProps {
   data: {
@@ -27,8 +29,8 @@ export const Receipt = forwardRef<HTMLDivElement, ReceiptProps>(
         {/* Transaction Details */}
         <div className="text-[10px] mb-2 border-b border-black border-dashed pb-2">
           <div className="flex justify-between">
-            <span>Tanggal:</span>
-            <span>{new Date().toLocaleDateString("id-ID")}</span>
+            <span>Tanggal/Waktu:</span>
+            <span>{format(data.order.createdAt, "dd MMM yyyy / HH:mm", { locale: id })}</span>
           </div>
           <div className="flex justify-between">
             <span>Order #:</span>
@@ -39,7 +41,7 @@ export const Receipt = forwardRef<HTMLDivElement, ReceiptProps>(
         {/* Items */}
         <div className="mb-2 text-[10px]">
           {data.orderItems.map((item: OrderItem) => (
-            <div className="flex justify-between mb-1">
+            <div key={item.id} className="flex justify-between mb-1">
               <span>
                 "{item.product?.name} x {item.quantity}"
               </span>

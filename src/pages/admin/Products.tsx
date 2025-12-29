@@ -1,20 +1,40 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { AddIcon, SearchIcon } from "../../components/Icons";
-import { getProducts } from "../../services/productServices";
+import { deleteProduct, getProducts } from "../../services/productServices";
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { Product } from "../../interfaces/productInterfaces";
 import ProductTable from "../../components/admin/ProductTable";
 import ProductTab from "../../components/pos/ProductTab";
+import toast from "react-hot-toast";
+import ConfirmModal from "../../components/ConfirmModal";
+import LoadingModal from "../../components/LoadingModal";
+import { handleApiError } from "../../utils/errorHandler";
 
 const categories = ["Ayam Geprek", "Minuman", "Tambahan"];
 
 const Products = () => {
   const navigate = useNavigate();
-  const [searchQuery, setSearchQuery] = useState("");
+  const queryClient = useQueryClient();
 
+  const [searchQuery, setSearchQuery] = useState("");
   const [page, setPage] = useState<number>(1);
   const [activeCategory, setActiveCategory] = useState(categories[0]);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [productIdToDelete, setProductIdToDelete] = useState<number>(0);
+
+  const { mutate: deleteItem, isPending: deletePending } = useMutation({
+    mutationFn: async (id: number) => {
+      return deleteProduct(id);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["products"] });
+      toast.success("Berhasil menghapus produk");
+    },
+    onError: (error) => {
+      handleApiError(error);
+    },
+  });
 
   const {
     data: queryResult,
@@ -117,6 +137,10 @@ const Products = () => {
             products={filteredItems}
             isLoading={isProductLoading}
             isError={!!productError}
+            onDelete={(productId) => {
+              setProductIdToDelete(productId);
+              setIsModalOpen(true);
+            }}
           />
         </div>
 
@@ -157,6 +181,16 @@ const Products = () => {
           </div>
         )}
       </div>
+      <ConfirmModal
+        isOpen={isModalOpen}
+        message="Apakah Anda yakin ingin menghapus produk ini?"
+        onCancel={() => setIsModalOpen(false)}
+        onConfirm={() => {
+          deleteItem(productIdToDelete);
+          setIsModalOpen(false);
+        }}
+      />
+      <LoadingModal isOpen={deletePending} message="Menghapus produk..." />
     </main>
   );
 };
