@@ -7,5 +7,9 @@ export interface NewUser {
 export interface UpdateUser {
   name?: string;
   shift?: string;
-  pin?: string;
+}
+
+export interface SetPin {
+  pin: string;
+  confirmPin: string;
 }

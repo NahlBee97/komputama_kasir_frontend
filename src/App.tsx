@@ -16,8 +16,10 @@ import Sales from "./pages/admin/Sales";
 import Report from "./pages/admin/Report";
 import AdminLogin from "./pages/AdminLogin";
 import Users from "./pages/admin/Users";
-import AddEditUser from "./pages/admin/AddEditUser";
 import { CartProvider } from "./components/provider/CartProvider";
+import AddUser from "./pages/admin/AddUser";
+import EditUser from "./pages/admin/EditUser";
+import Pin from "./pages/admin/Pin";
 
 const queryClient = new QueryClient();
 
@@ -52,10 +54,14 @@ const App = () => {
                   <Route path="/admin/sales" element={<Sales />} />
                   <Route path="/admin/report" element={<Report />} />
                   <Route path="/admin/users" element={<Users />} />
-                  <Route path="/admin/users/add" element={<AddEditUser />} />
+                  <Route path="/admin/users/add" element={<AddUser />} />
                   <Route
                     path="/admin/users/edit/:id"
-                    element={<AddEditUser />}
+                    element={<EditUser />}
+                  />
+                  <Route
+                    path="/admin/users/pin/:id"
+                    element={<Pin />}
                   />
                 </Route>
               </Route>

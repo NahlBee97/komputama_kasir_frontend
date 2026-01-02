@@ -1,26 +1,18 @@
 import { useFormik } from "formik";
 import { ExpandMoreIcon, WarningIcon } from "../../components/Icons";
-import { useNavigate, useParams, useLocation } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import Loader from "../../components/Loader";
-import type { NewUser, UpdateUser } from "../../interfaces/userInterfaces";
-import {
-  createUser,
-  getUserById,
-  updateUser,
-} from "../../services/userServices";
-import { editUserSchema, userSchema } from "../../schemas/userSchema";
+import type { UpdateUser } from "../../interfaces/userInterfaces";
+import { getUserById, updateUser } from "../../services/userServices";
+import { editUserSchema } from "../../schemas/userSchema";
 import LoadingModal from "../../components/LoadingModal";
 
 const shifts = ["Siang", "Malam"];
 
-const AddEditUser = () => {
+const EditUser = () => {
   const navigate = useNavigate();
   const { id } = useParams();
-  const location = useLocation();
-
-  const pathSegments = location.pathname.split("/");
-  const mode = pathSegments.includes("add") ? "add" : "edit";
 
   const {
     data: user,
@@ -29,19 +21,6 @@ const AddEditUser = () => {
   } = useQuery({
     queryKey: ["user", id],
     queryFn: () => getUserById(Number(id)),
-    enabled: mode === "edit" && !!id,
-  });
-
-  const { mutate: addUser, isPending: isAddPending } = useMutation({
-    mutationFn: async (data: NewUser) => {
-      return createUser(data);
-    },
-    onSuccess: () => {
-      navigate("/admin/users");
-    },
-    onError: (error) => {
-      alert("Error: " + error.message);
-    },
   });
 
   const { mutate: editUser, isPending: isEditPending } = useMutation({
@@ -56,24 +35,19 @@ const AddEditUser = () => {
     },
   });
 
-  const formik = useFormik<NewUser | UpdateUser>({
+  const formik = useFormik<UpdateUser>({
     enableReinitialize: true,
     initialValues: {
-      name: user?.name || "",
-      pin: user?.pin || "",
+      name: user?.name,
       shift: user?.shift
         ? user.shift === "DAY"
           ? "Siang"
           : "Malam"
         : shifts[0],
     },
-    validationSchema: mode === "edit" ? editUserSchema : userSchema,
+    validationSchema: editUserSchema,
     onSubmit: async (values) => {
-      if (mode === "add") {
-        addUser(values as NewUser);
-      } else {
-        editUser(values as UpdateUser);
-      }
+      editUser(values as UpdateUser);
     },
   });
 
@@ -96,7 +70,7 @@ const AddEditUser = () => {
           {/* Header */}
           <div className="mb-8 border-b-2 border-black pb-6">
             <h1 className="text-black text-4xl font-black leading-tight tracking-tighter uppercase">
-              {mode === "add" ? "Tambah" : "Edit"} Petugas
+              Edit Petugas
             </h1>
           </div>
 
@@ -131,52 +105,47 @@ const AddEditUser = () => {
                   )}
                 </label>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {/* PIN Input */}
-                  <label className="flex flex-col w-full">
-                    <p className={labelClass}>PIN Akses</p>
-                    <input
-                      name="pin"
-                      type="password" // Hidden for security, or text if you prefer visibility
-                      maxLength={6} // Assuming 6 digit pin
-                      className={inputClass}
-                      placeholder="******"
-                      value={formik.values.pin}
+                {/* Shift Select */}
+                <label className="flex flex-col w-full">
+                  <p className={labelClass}>Shift Kerja</p>
+                  <div className="relative">
+                    <select
+                      name="shift"
+                      className={`${inputClass} appearance-none cursor-pointer`}
+                      value={formik.values.shift}
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
-                    />
-                    {formik.touched.pin && formik.errors.pin && (
-                      <p className={errorClass}>{formik.errors.pin}</p>
-                    )}
-                  </label>
-
-                  {/* Shift Select */}
-                  <label className="flex flex-col w-full">
-                    <p className={labelClass}>Shift Kerja</p>
-                    <div className="relative">
-                      <select
-                        name="shift"
-                        className={`${inputClass} appearance-none cursor-pointer`}
-                        value={formik.values.shift}
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                      >
-                        {shifts.map((shift) => (
-                          <option key={shift} value={shift}>
-                            {shift}
-                          </option>
-                        ))}
-                      </select>
-                      {/* Custom Arrow */}
-                      <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-black">
-                        <ExpandMoreIcon />
-                      </div>
+                    >
+                      {shifts.map((shift) => (
+                        <option key={shift} value={shift}>
+                          {shift}
+                        </option>
+                      ))}
+                    </select>
+                    {/* Custom Arrow */}
+                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-black">
+                      <ExpandMoreIcon />
                     </div>
-                    {formik.touched.shift && formik.errors.shift && (
-                      <p className={errorClass}>{formik.errors.shift}</p>
-                    )}
-                  </label>
-                </div>
+                  </div>
+                  {formik.touched.shift && formik.errors.shift && (
+                    <p className={errorClass}>{formik.errors.shift}</p>
+                  )}
+                </label>
+
+                <button
+                  type="button"
+                  className="
+                    flex h-12 min-w-32 cursor-pointer items-center justify-center 
+                    rounded-lg bg-white px-6 py-2 self-start
+                    text-base font-black tracking-wider text-black 
+                    border-2 border-black
+                    hover:bg-black hover:text-white 
+                    transition-all duration-200
+                  "
+                  onClick={() => navigate(`/admin/users/pin/${id}`)}
+                >
+                  Ganti PIN Akses?
+                </button>
               </div>
 
               {/* Action Buttons */}
@@ -192,13 +161,13 @@ const AddEditUser = () => {
                     transition-all duration-200
                   "
                   onClick={() => navigate("/admin/users")}
-                  disabled={isAddPending || isEditPending}
+                  disabled={isEditPending}
                 >
                   Batal
                 </button>
                 <button
                   type="submit"
-                  disabled={formik.isSubmitting || isAddPending || isEditPending}
+                  disabled={formik.isSubmitting || isEditPending}
                   className="
                     flex h-12 min-w-32 cursor-pointer items-center justify-center 
                     rounded-lg bg-black px-6 py-2 
@@ -216,10 +185,10 @@ const AddEditUser = () => {
             </form>
           )}
         </div>
-        <LoadingModal isOpen={isEditPending || isAddPending} message={mode === "add" ? "Menambahkan kasir..." : "Mengedit kasir..."}/>
+        <LoadingModal isOpen={isEditPending} message="Mengedit kasir..." />
       </div>
     </main>
   );
 };
 
-export default AddEditUser;
+export default EditUser;

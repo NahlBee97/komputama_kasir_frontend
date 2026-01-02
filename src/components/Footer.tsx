@@ -5,7 +5,7 @@ const Footer = () => {
       <div className="flex items-center justify-center">
         {/* Updated Typography: Black, Uppercase, Heavy Weight */}
         <p className="text-xs font-medium tracking-widest text-white">
-          © 2024 Nahalil. All rights reserved.
+          © 2026 Nahalil. All rights reserved.
         </p>
       </div>
     </footer>
