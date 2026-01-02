@@ -11,7 +11,7 @@ import ConfirmModal from "../../components/ConfirmModal";
 import LoadingModal from "../../components/LoadingModal";
 import { handleApiError } from "../../utils/errorHandler";
 
-const categories = ["Ayam Geprek", "Minuman", "Tambahan"];
+const categories = ["ATK", "Elektronik"];
 
 const Products = () => {
   const navigate = useNavigate();

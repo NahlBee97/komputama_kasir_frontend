@@ -8,7 +8,7 @@ import ProductTab from "../components/pos/ProductTab";
 import { useMutation } from "@tanstack/react-query";
 import LoadingModal from "../components/LoadingModal";
 
-const categories = ["Ayam Geprek", "Minuman", "Tambahan"];
+const categories = ["ATK", "Elektronik"];
 
 const Pos = () => {
   const { user, logout } = useAuth();

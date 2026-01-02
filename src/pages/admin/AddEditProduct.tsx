@@ -22,7 +22,7 @@ import LoadingModal from "../../components/LoadingModal";
 import { handleApiError } from "../../utils/errorHandler";
 import toast from "react-hot-toast";
 
-const categories = ["Ayam Geprek", "Minuman", "Tambahan"];
+const categories = ["ATK", "Elektronik"];
 
 const AddEditProduct = () => {
   const navigate = useNavigate();
@@ -168,7 +168,7 @@ const AddEditProduct = () => {
                     <input
                       name="name"
                       className={inputClass}
-                      placeholder="Contoh: Paket Ayam Spesial"
+                      placeholder="Contoh: Print A4"
                       value={formik.values.name}
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}

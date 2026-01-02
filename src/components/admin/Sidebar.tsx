@@ -51,7 +51,7 @@ const Sidebar = () => {
           <img src="/diarylogo.jpeg" alt="logo" className="rounded-lg" />
         </div>
         <h1 className="text-2xl font-black uppercase tracking-tighter text-black leading-none">
-          Diary Kasir
+          Komputama Kasir
         </h1>
       </div>
 

@@ -71,7 +71,7 @@ const AdminLogin = () => {
           </div>
           {/* Headline */}
           <h1 className="tracking-tight text-[32px] font-black leading-tight text-center mb-8 uppercase">
-            Diary Kasir Admin
+            Komputama Kasir Admin
           </h1>
 
           {/* Subheader */}

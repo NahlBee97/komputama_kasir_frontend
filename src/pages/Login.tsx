@@ -82,7 +82,7 @@ const Login = () => {
 
           {/* Headline */}
           <h1 className="tracking-tight text-[32px] font-black leading-tight text-center mb-8 uppercase">
-            DIARY KASIR
+            KOMPUTAMA KASIR
           </h1>
 
           {/* Cashier Selection */}
