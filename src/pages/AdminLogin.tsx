@@ -57,8 +57,8 @@ const AdminLogin = () => {
   }, [pin]);
 
   return (
-    // Updated: White background, Black text
-    <div className="layout-container flex h-full grow flex-col bg-white text-black selection:bg-black selection:text-white">
+    // Updated: White background, [#007ACC] text
+    <div className="layout-container flex h-full grow flex-col bg-white text-[#007ACC] selection:bg-[#007ACC] selection:text-white">
       <div className="flex flex-1 justify-center items-center py-10 px-4 sm:px-6 lg:px-8">
         <div className="layout-content-container flex flex-col max-w-sm w-full mx-auto">
           {/* Logo Section */}
@@ -102,7 +102,7 @@ const AdminLogin = () => {
             <div className="flex items-center justify-center p-4 h-16 rounded-lg"></div>
             <KeypadButton onClick={() => handleNumClick("0")}>0</KeypadButton>
             <KeypadButton onClick={handleBackspace}>
-              <BackspaceIcon className="w-8 h-8 text-black" />
+              <BackspaceIcon className="w-8 h-8 text-[#007ACC]" />
             </KeypadButton>
           </div>
 
@@ -114,9 +114,9 @@ const AdminLogin = () => {
               className="
                 flex min-w-[84px] w-full max-w-[480px] cursor-pointer items-center justify-center 
                 overflow-hidden rounded-xl h-14 px-5 
-                bg-black text-white 
+                bg-[#007ACC] text-white 
                 text-lg font-black leading-normal tracking-widest uppercase
-                border-2 border-black
+                border-2 border-[#007ACC]
                 hover:bg-zinc-800 transition-all duration-200
                 active:scale-95
               "

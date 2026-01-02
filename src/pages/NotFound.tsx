@@ -1,9 +1,9 @@
 import { useNavigate } from "react-router-dom";
 
-// Updated Illustration: Clean Black Lines, no glow
+// Updated Illustration: Clean [#007ACC] Lines, no glow
 const EmptyBucketIllustration = () => (
   <svg
-    className="w-full h-auto text-black"
+    className="w-full h-auto text-[#007ACC]"
     fill="none"
     viewBox="0 0 120 100"
     xmlns="http://www.w3.org/2000/svg"
@@ -40,7 +40,7 @@ const NotFound = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="relative flex h-screen w-full flex-col bg-white overflow-hidden font-sans text-black selection:bg-black selection:text-white">
+    <div className="relative flex h-screen w-full flex-col bg-white overflow-hidden font-sans text-[#007ACC] selection:bg-[#007ACC] selection:text-white">
       {/* Decorative Background Pattern (Optional - dot grid) */}
       <div
         className="absolute inset-0 opacity-[0.05]"
@@ -55,7 +55,7 @@ const NotFound = () => {
           <div className="layout-content-container flex max-w-lg flex-1 flex-col items-center gap-2 text-center">
             {/* 404 Text - Huge & Heavy */}
             <h1
-              className="text-black tracking-tighter text-[15vw] sm:text-[100px] md:text-[160px] font-black leading-none"
+              className="text-[#007ACC] tracking-tighter text-[15vw] sm:text-[100px] md:text-[160px] font-[#007ACC] leading-none"
               // Hard gray shadow for depth without color
               style={{
                 textShadow: "10px 10px 0px rgba(0,0,0,0.1)",
@@ -73,11 +73,11 @@ const NotFound = () => {
             </div>
 
             {/* Page Not Found Text */}
-            <h2 className="text-black text-2xl sm:text-3xl font-black uppercase tracking-widest">
+            <h2 className="text-[#007ACC] text-2xl sm:text-3xl font-[#007ACC] uppercase tracking-widest">
               Halaman Tidak Ditemukan
             </h2>
 
-            <p className="text-black/50 font-medium mt-2 max-w-md">
+            <p className="text-[#007ACC]/50 font-medium mt-2 max-w-md">
               Sepertinya halaman yang anda cari sudah tidak ada atau telah
               dipindahkan.
             </p>
@@ -89,11 +89,11 @@ const NotFound = () => {
                 className="
                     group flex items-center justify-center 
                     h-14 px-10 rounded-full
-                    bg-white text-black border-2 border-black
+                    bg-white text-[#007ACC] border-2 border-[#007ACC]
                     text-lg font-black uppercase tracking-widest
                     shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]
                     hover:shadow-none hover:translate-x-[3px] hover:translate-y-[3px]
-                    hover:bg-black hover:text-white
+                    hover:bg-[#007ACC] hover:text-white
                     active:scale-95
                     transition-all duration-200 ease-out
                 "

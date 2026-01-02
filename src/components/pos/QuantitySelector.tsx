@@ -33,11 +33,11 @@ const QuantitySelector = ({ item }: QuantitySelectorProps) => {
   // Shared button class
   const buttonClass = `
     group flex h-7 w-7 items-center justify-center rounded-full 
-    border border-black bg-white text-black 
+    border border-[#007ACC] bg-white text-[#007ACC] 
     transition-all duration-200 
-    hover:bg-black hover:text-white 
+    hover:bg-[#007ACC] hover:text-white 
     active:scale-90
-    disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-white disabled:hover:text-black
+    disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-white disabled:hover:text-[#007ACC]
   `;
 
   return (
@@ -53,7 +53,7 @@ const QuantitySelector = ({ item }: QuantitySelectorProps) => {
         </button>
 
         {/* 4. Display item.quantity directly (Source of Truth) */}
-        <span className="min-w-5 text-center text-base font-black text-black">
+        <span className="min-w-5 text-center text-base font-black text-[#007ACC]">
           {item.quantity}
         </span>
 
@@ -67,7 +67,7 @@ const QuantitySelector = ({ item }: QuantitySelectorProps) => {
         </button>
       </div>
 
-      <p className="text-black text-base font-black">
+      <p className="text-[#007ACC] text-base font-black">
         {formatCurrency(item.product.price * item.quantity)}
       </p>
 

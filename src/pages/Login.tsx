@@ -68,7 +68,7 @@ const Login = () => {
   }, [pin]);
 
   return (
-    <div className="layout-container flex h-full grow flex-col bg-white text-black">
+    <div className="layout-container flex h-full grow flex-col bg-white text-[#007ACC]">
       <div className="flex flex-1 justify-center items-center py-10 px-4 sm:px-6 lg:px-8">
         <div className="layout-content-container flex flex-col max-w-sm w-full mx-auto">
           {/* Logo Section */}
@@ -89,10 +89,10 @@ const Login = () => {
           <div className="flex flex-col justify-center items-center gap-2 mb-2">
             <select
               id="cashier-select"
-              className="mb-4 p-3 border-2 border-black rounded-lg w-full bg-white text-black font-medium focus:outline-none"
+              className="mb-4 p-3 border-2 border-[#007ACC] rounded-lg w-full bg-white text-[#007ACC] font-medium focus:outline-none"
               onChange={handleUserChange}
             >
-              <option value="" className="text-black">
+              <option value="" className="text-[#007ACC]">
                 {isLoadingUsers
                   ? "Memuat data kasir..."
                   : isError ? "Tidak dapat memuat data kasir" : "Pilih Petugas Kasir"}
@@ -132,7 +132,7 @@ const Login = () => {
             <div className="flex items-center justify-center p-4 h-16 rounded-lg"></div>
             <KeypadButton onClick={() => handleNumClick("0")}>0</KeypadButton>
             <KeypadButton onClick={handleBackspace}>
-              <BackspaceIcon className="w-8 h-8 text-black" />
+              <BackspaceIcon className="w-8 h-8 text-[#007ACC]" />
             </KeypadButton>
           </div>
 
@@ -140,7 +140,7 @@ const Login = () => {
           <div className="flex p-4 justify-center">
             <button
               onClick={() => handleLogin(pin)}
-              className="flex min-w-[84px] w-full max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-14 px-5 bg-black text-white text-lg font-black leading-normal tracking-widest hover:bg-gray-800 transition-all duration-200 border-2 border-black"
+              className="flex min-w-[84px] w-full max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-14 px-5 bg-[#007ACC] text-white text-lg font-black leading-normal tracking-widest hover:bg-gray-800 transition-all duration-200 border-2 border-[#007ACC]"
             >
               <span className="truncate">LOGIN</span>
             </button>

@@ -20,7 +20,7 @@ const TopSelling = ({ products, isLoading, isError }: props) => {
           ) : (
             <Loader size="md" variant="dark" />
           )}
-          <p className="text-black font-bold uppercase tracking-wider">
+          <p className="text-[#007ACC] font-bold uppercase tracking-wider">
             {isError ? "Gagal Memuat Produk" : "Memuat Data Produk..."}
           </p>
         </div>
@@ -32,7 +32,7 @@ const TopSelling = ({ products, isLoading, isError }: props) => {
     return (
       <div className="w-full bg-white">
         <div className="w-full min-h-80 flex flex-col gap-2 justify-center items-center">
-          <p className="text-black font-black uppercase tracking-widest text-lg">
+          <p className="text-[#007ACC] font-black uppercase tracking-widest text-lg">
             Belum Ada Penjualan
           </p>
         </div>
@@ -44,8 +44,8 @@ const TopSelling = ({ products, isLoading, isError }: props) => {
     <div className="w-full bg-white">
       <div className="overflow-x-auto">
         <table className="w-full text-left border-collapse">
-          {/* Header: Solid Black for High Contrast */}
-          <thead className="bg-black text-white">
+          {/* Header: Solid [#007ACC] for High Contrast */}
+          <thead className="bg-[#007ACC] text-white">
             <tr>
               <th className="p-4 text-xs font-black uppercase tracking-widest">
                 # ID
@@ -62,23 +62,23 @@ const TopSelling = ({ products, isLoading, isError }: props) => {
             </tr>
           </thead>
 
-          {/* Body: White Background, Black Text */}
-          <tbody className="bg-white text-black">
+          {/* Body: White Background, [#007ACC] Text */}
+          <tbody className="bg-white text-[#007ACC]">
             {products.map((product: TopProduct) => (
               <tr
                 key={product.id}
-                className="border-b border-black/10 hover:bg-gray-50 transition-colors"
+                className="border-b border-[#007ACC]/10 hover:bg-gray-50 transition-colors"
               >
-                <td className="p-4 text-sm font-medium text-black/60">
+                <td className="p-4 text-sm font-medium text-[#007ACC]/60">
                   #{product.id}
                 </td>
-                <td className="p-4 text-sm font-bold uppercase text-black">
+                <td className="p-4 text-sm font-bold uppercase text-[#007ACC]">
                   {product.name}
                 </td>
-                <td className="p-4 text-sm font-black text-right text-black">
+                <td className="p-4 text-sm font-black text-right text-[#007ACC]">
                   {product.totalSold || 0}
                 </td>
-                <td className="p-4 text-sm font-medium text-right text-black">
+                <td className="p-4 text-sm font-medium text-right text-[#007ACC]">
                   {formatCurrency(product.totalSold * product.price)}
                 </td>
               </tr>

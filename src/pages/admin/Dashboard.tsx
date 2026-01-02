@@ -57,12 +57,12 @@ const Dashboard = () => {
   );
 
   return (
-    // Main Container: White bg, Black text
-    <main className="flex flex-1 flex-col bg-white text-black min-h-full">
+    // Main Container: White bg, [#007ACC] text
+    <main className="flex flex-1 flex-col bg-white text-[#007ACC] min-h-full">
       <div className="flex-1 p-6 lg:p-10">
         {/* Header Section */}
-        <div className="flex flex-wrap items-end justify-between gap-6 border-b-2 border-black pb-8">
-          <h1 className="text-black text-4xl sm:text-5xl font-black leading-tight tracking-tighter uppercase">
+        <div className="flex flex-wrap items-end justify-between gap-6 border-b-2 border-[#007ACC] pb-8">
+          <h1 className="text-[#007ACC] text-4xl sm:text-5xl font-black leading-tight tracking-tighter uppercase">
             Penjualan Hari Ini
           </h1>
 
@@ -71,7 +71,7 @@ const Dashboard = () => {
             <div className="relative">
               <select
                 id="cashier-select"
-                className="w-full appearance-none cursor-pointer rounded-lg border-2 border-black bg-white py-3 pl-4 pr-10 font-bold text-black focus:outline-none focus:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all duration-200"
+                className="w-full appearance-none cursor-pointer rounded-lg border-2 border-[#007ACC] bg-white py-3 pl-4 pr-10 font-bold text-[#007ACC] focus:outline-none focus:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all duration-200"
                 onChange={handleUserChange}
               >
                 <option value="">
@@ -84,7 +84,7 @@ const Dashboard = () => {
                 ))}
               </select>
               {/* Custom Chevron Icon for B&W Theme */}
-              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-black">
+              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-[#007ACC]">
                 <svg
                   className="h-5 w-5"
                   fill="none"
@@ -130,13 +130,13 @@ const Dashboard = () => {
 
         {/* Low Stock Alerts */}
         <div className="mt-12">
-          <h2 className="mb-6 flex items-center gap-3 text-2xl font-black uppercase tracking-tight text-black">
-            <span className="h-3 w-3 rounded-full bg-black"></span>
+          <h2 className="mb-6 flex items-center gap-3 text-2xl font-black uppercase tracking-tight text-[#007ACC]">
+            <span className="h-3 w-3 rounded-full bg-[#007ACC]"></span>
             Produk Stok Rendah
           </h2>
 
           {/* Table Container with B&W styling */}
-          <div className="overflow-hidden rounded-xl border-2 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
+          <div className="overflow-hidden rounded-xl border-2 border-[#007ACC] shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
             <LowStockTable
               products={products}
               isLoading={isProductsLoading}

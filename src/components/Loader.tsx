@@ -21,10 +21,10 @@ const Loader: React.FC<LoaderProps> = ({
     xl: "w-16 h-16 border-[6px]", // Slightly thinner for a cleaner B&W look
   };
 
-  // Map variants to black/white color classes
+  // Map variants to [#007ACC]/white color classes
   const colorClasses = {
-    // Primary/Yellow replaced with high-contrast Black
-    dark: "border-black border-t-transparent",
+    // Primary/Yellow replaced with high-contrast [#007ACC]
+    dark: "border-[#007ACC] border-t-transparent",
     secondary: "border-gray-400 border-t-transparent",
     white: "border-white border-t-transparent",
   };

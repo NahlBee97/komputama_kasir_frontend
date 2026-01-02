@@ -70,16 +70,16 @@ const Sales = () => {
   // --- Styles ---
   const inputContainerClass = "relative w-full sm:w-auto";
   const labelClass =
-    "absolute -top-2.5 left-3 bg-white px-1 text-xs font-black uppercase tracking-widest text-black";
+    "absolute -top-2.5 left-3 bg-white px-1 text-xs font-black uppercase tracking-widest text-[#007ACC]";
   const inputClass =
-    "h-12 w-full min-w-[160px] appearance-none rounded-lg border-2 border-black bg-white px-4 text-sm font-bold text-black placeholder-black/30 outline-none focus:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all duration-200";
+    "h-12 w-full min-w-[160px] appearance-none rounded-lg border-2 border-[#007ACC] bg-white px-4 text-sm font-bold text-[#007ACC] placeholder-[#007ACC]/30 outline-none focus:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all duration-200";
 
   return (
-    // Main Container: White bg, Black text
-    <main className="flex-1 flex flex-col px-4 py-8 md:px-10 bg-white text-black h-full">
+    // Main Container: White bg, [#007ACC] text
+    <main className="flex-1 flex flex-col px-4 py-8 md:px-10 bg-white text-[#007ACC] h-full">
       <div className="layout-content-container flex flex-col w-full max-w-7xl mx-auto flex-1 h-full">
         {/* Header Section */}
-        <header className="flex flex-col justify-between gap-6 mb-8 border-b-2 border-black pb-8">
+        <header className="flex flex-col justify-between gap-6 mb-8 border-b-2 border-[#007ACC] pb-8">
           <h1 className="text-4xl sm:text-5xl font-black leading-tight tracking-tighter uppercase">
             Riwayat Penjualan
           </h1>
@@ -140,7 +140,7 @@ const Sales = () => {
                     ))}
                   </select>
                   {/* Custom Chevron */}
-                  <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-black">
+                  <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-[#007ACC]">
                     <svg
                       className="h-4 w-4"
                       fill="none"
@@ -160,13 +160,13 @@ const Sales = () => {
             </div>
             {/* Search Input - Pill Style */}
             <div className="relative w-full md:w-64">
-              <div className="absolute left-4 top-1/2 -translate-y-1/2 text-black/50">
+              <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#007ACC]/50">
                 <SearchIcon />
               </div>
               <input
                 type="text"
                 placeholder="Cari ID..."
-                className="w-full bg-white border-2 border-black rounded-full py-3 pl-11 pr-5 text-black placeholder:text-black/40 text-sm font-bold focus:outline-none focus:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.1)] transition-all duration-200"
+                className="w-full bg-white border-2 border-[#007ACC] rounded-full py-3 pl-11 pr-5 text-[#007ACC] placeholder:text-[#007ACC]/40 text-sm font-bold focus:outline-none focus:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.1)] transition-all duration-200"
                 onChange={(e) => setSearchQuery(e.target.value)}
                 value={searchQuery}
               />
@@ -183,9 +183,9 @@ const Sales = () => {
                   <SaleCard key={order.id} order={order} />
                 ))
               ) : (
-                <div className="h-60 flex flex-col justify-center items-center gap-4 border-2 border-dashed border-black/20 rounded-xl">
+                <div className="h-60 flex flex-col justify-center items-center gap-4 border-2 border-dashed border-[#007ACC]/20 rounded-xl">
                   <WarningIcon />
-                  <p className="text-center font-bold uppercase tracking-wider text-black/40">
+                  <p className="text-center font-bold uppercase tracking-wider text-[#007ACC]/40">
                     Riwayat Penjualan Tidak Ditemukan.
                   </p>
                 </div>
@@ -194,22 +194,22 @@ const Sales = () => {
 
             {/* 3. Pagination Controls */}
             {totalPages > 1 && !searchQuery && (
-              <div className="flex justify-center items-center gap-4 py-6 border-t-2 border-black mt-4">
+              <div className="flex justify-center items-center gap-4 py-6 border-t-2 border-[#007ACC] mt-4">
                 <button
                   onClick={() => handlePageChange(currentPage - 1)}
                   disabled={currentPage === 1 || isLoading}
                   className="
                     px-4 py-2 rounded-lg 
                     text-xs font-bold uppercase tracking-wider
-                    border-2 border-black bg-white text-black
-                    hover:bg-black hover:text-white
-                    disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-black
+                    border-2 border-[#007ACC] bg-white text-[#007ACC]
+                    hover:bg-[#007ACC] hover:text-white
+                    disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-[#007ACC]
                     transition-all duration-200
                   "
                 >
                   Kembali
                 </button>
-                <span className="text-black font-bold text-sm">
+                <span className="text-[#007ACC] font-bold text-sm">
                   Hal {currentPage} dari {totalPages}
                 </span>
                 <button
@@ -218,9 +218,9 @@ const Sales = () => {
                   className="
                     px-4 py-2 rounded-lg 
                     text-xs font-bold uppercase tracking-wider
-                    border-2 border-black bg-white text-black
-                    hover:bg-black hover:text-white
-                    disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-black
+                    border-2 border-[#007ACC] bg-white text-[#007ACC]
+                    hover:bg-[#007ACC] hover:text-white
+                    disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-[#007ACC]
                     transition-all duration-200
                   "
                 >
@@ -232,7 +232,7 @@ const Sales = () => {
         ) : (
           <div className="flex flex-col w-full h-80 items-center justify-center gap-4">
             {error ? <WarningIcon /> : <Loader size="md" variant="dark" />}
-            <p className="text-black font-bold uppercase tracking-wider">
+            <p className="text-[#007ACC] font-bold uppercase tracking-wider">
               {error ? "Gagal Memuat Data" : "Memuat Data..."}
             </p>
           </div>

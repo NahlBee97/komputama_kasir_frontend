@@ -86,7 +86,7 @@ const CartSection = () => {
     return (
       <div className="flex flex-col gap-2 w-full h-full items-center justify-center bg-white">
         <Loader size="lg" variant="dark" />
-        <h3 className="text-black font-bold uppercase">Memuat Keranjang...</h3>
+        <h3 className="text-[#007ACC] font-bold uppercase">Memuat Keranjang...</h3>
       </div>
     );
   }
@@ -95,7 +95,7 @@ const CartSection = () => {
     return (
       <div className="flex flex-col gap-2 w-full h-full items-center justify-center bg-white text-red-600">
         <WarningIcon />
-        <h3 className="text-black font-bold uppercase">
+        <h3 className="text-[#007ACC] font-bold uppercase">
           Gangguan Memuat Keranjang
         </h3>
       </div>
@@ -112,17 +112,17 @@ const CartSection = () => {
   return (
     <div className="flex flex-col w-full h-screen bg-white overflow-hidden">
       {/* Header (Fixed) */}
-      <h2 className="shrink-0 text-black h-20 p-6 text-lg font-black leading-tight tracking-tight uppercase border-b border-black">
+      <h2 className="shrink-0 text-[#007ACC] h-20 p-6 text-lg font-black leading-tight tracking-tight uppercase border-b border-[#007ACC]">
         Detail Pesanan
       </h2>
 
       {/* List Items (Scrollable) */}
-      <div className="flex-1 min-h-0 px-2 overflow-y-auto scrollbar-thin scrollbar-thumb-black/30 scrollbar-track-transparent hover:scrollbar-thumb-black/50">
+      <div className="flex-1 min-h-0 px-2 overflow-y-auto scrollbar-thin scrollbar-thumb-[#007ACC]/30 scrollbar-track-transparent hover:scrollbar-thumb-[#007ACC]/50">
         {/* Handle case where we have receiptData but cart is empty (prevent crash map) */}
         {cartItems.map((item: CartItem) => (
           <div
             key={item.id}
-            className="flex items-center gap-4 px-4 py-4 justify-between border-b border-black/10 hover:bg-black/5 transition-colors"
+            className="flex items-center gap-4 px-4 py-4 justify-between border-b border-[#007ACC]/10 hover:bg-[#007ACC]/5 transition-colors"
           >
             <CartItemCard item={item} />
           </div>
@@ -130,12 +130,12 @@ const CartSection = () => {
       </div>
 
       {/* Footer (Fixed) */}
-      <div className="shrink-0 p-6 border-t border-black mt-auto bg-white">
+      <div className="shrink-0 p-6 border-t border-[#007ACC] mt-auto bg-white">
         <div className="flex justify-between items-center mb-4">
-          <p className="text-black font-medium text-lg uppercase tracking-wider">
+          <p className="text-[#007ACC] font-medium text-lg uppercase tracking-wider">
             Total
           </p>
-          <p className="text-black font-black text-2xl">
+          <p className="text-[#007ACC] font-black text-2xl">
             {formatCurrency(totalAmount)}
           </p>
         </div>
@@ -143,12 +143,12 @@ const CartSection = () => {
         <button
           onClick={() => setIsModalOpen(true)}
           disabled={isPending || isCartLoading || cartItems.length === 0}
-          className="group w-full bg-black text-white text-lg font-black py-4 rounded-full 
+          className="group w-full bg-[#007ACC] text-white text-lg font-black py-4 rounded-full 
                       shadow-[4px_4px_0px_0px_rgba(0,0,0,0.2)] 
                       hover:shadow-none hover:translate-y-0.5 
                       active:scale-[0.98] active:translate-y-0.5
                       transition-all duration-200 ease-out 
-                      uppercase tracking-widest border border-black
+                      uppercase tracking-widest border border-[#007ACC]
                       disabled:bg-gray-300 disabled:shadow-none disabled:border-gray-300 disabled:cursor-not-allowed"
         >
           {isPending ? "MEMPROSES..." : "BAYAR SEKARANG"}

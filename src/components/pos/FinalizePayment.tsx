@@ -34,8 +34,8 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 font-sans backdrop-blur-sm">
       {/* Modal Container */}
       <div
-        className="relative flex w-full max-w-lg flex-col gap-6 bg-white p-8 transition-all duration-300 transform scale-100 border-2 border-black"
-        // Solid black shadow for the "Pop" B&W aesthetic
+        className="relative flex w-full max-w-lg flex-col gap-6 bg-white p-8 transition-all duration-300 transform scale-100 border-2 border-[#007ACC]"
+        // Solid [#007ACC] shadow for the "Pop" B&W aesthetic
         style={{
           boxShadow: "8px 8px 0px 0px rgba(0,0,0,1)",
         }}
@@ -43,20 +43,20 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-black hover:bg-black hover:text-white rounded-full p-1 transition-all duration-200"
+          className="absolute top-4 right-4 text-[#007ACC] hover:bg-[#007ACC] hover:text-white rounded-full p-1 transition-all duration-200"
         >
           <CloseIcon />
         </button>
 
         {/* Headline */}
-        <div className="flex flex-col items-center border-b-2 border-black pb-4">
-          <h1 className="text-black tracking-tight text-3xl font-black leading-tight text-center uppercase">
+        <div className="flex flex-col items-center border-b-2 border-[#007ACC] pb-4">
+          <h1 className="text-[#007ACC] tracking-tight text-3xl font-black leading-tight text-center uppercase">
             Pembayaran
           </h1>
         </div>
 
         {/* Total Amount Display */}
-        <div className="flex flex-col items-center bg-black py-4">
+        <div className="flex flex-col items-center bg-[#007ACC] py-4">
           <h1 className="text-white tracking-tight text-3xl font-black leading-tight text-center uppercase">
             Total : {formatCurrency(total)}
           </h1>
@@ -64,12 +64,12 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
 
         {/* Cash Received Input */}
         <div className="flex w-full flex-col gap-2">
-          <label className="text-black text-sm font-bold uppercase tracking-wider">
+          <label className="text-[#007ACC] text-sm font-bold uppercase tracking-wider">
             Uang Diterima
           </label>
           <input
             autoFocus
-            className="w-full border-2 border-black bg-white h-14 px-4 text-xl font-bold text-black placeholder:text-black/30 focus:outline-none focus:bg-gray-50 focus:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.2)] transition-all duration-200"
+            className="w-full border-2 border-[#007ACC] bg-white h-14 px-4 text-xl font-bold text-[#007ACC] placeholder:text-[#007ACC]/30 focus:outline-none focus:bg-gray-50 focus:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.2)] transition-all duration-200"
             placeholder="Masukkan jumlah uang..."
             value={cashReceived}
             onChange={handleInputChange}
@@ -79,10 +79,10 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
 
         {/* Change Due Display */}
         <div className="flex flex-col items-center py-2">
-          <p className="text-black/60 text-sm font-bold uppercase tracking-wider">
+          <p className="text-[#007ACC]/60 text-sm font-bold uppercase tracking-wider">
             Kembalian
           </p>
-          <h1 className="text-black text-3xl font-black leading-tight mt-1">
+          <h1 className="text-[#007ACC] text-3xl font-black leading-tight mt-1">
             {formatCurrency(change)}
           </h1>
         </div>
@@ -94,9 +94,9 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
             disabled={Number(cashReceived) < total}
             className="
               w-full h-14
-              bg-black text-white 
+              bg-[#007ACC] text-white 
               text-lg font-black uppercase tracking-widest
-              border-2 border-black
+              border-2 border-[#007ACC]
               shadow-[4px_4px_0px_0px_rgba(0,0,0,0.2)]
               hover:shadow-none hover:translate-y-0.5 hover:translate-x-0.5
               active:scale-[0.99]

@@ -78,10 +78,10 @@ const Products = () => {
   };
 
   return (
-    // Main Container: White bg, Black text
-    <main className="flex flex-1 flex-col bg-white text-black min-h-full p-6 lg:p-10">
+    // Main Container: White bg, [#007ACC] text
+    <main className="flex flex-1 flex-col bg-white text-[#007ACC] min-h-full p-6 lg:p-10">
       {/* Header Section */}
-      <div className="flex flex-col items-start justify-between gap-6 mb-4 border-b-2 border-black pb-8">
+      <div className="flex flex-col items-start justify-between gap-6 mb-4 border-b-2 border-[#007ACC] pb-8">
         <h1 className="text-4xl sm:text-5xl font-black leading-tight tracking-tighter uppercase">
           Pengaturan Produk
         </h1>
@@ -89,11 +89,11 @@ const Products = () => {
         <div className="flex w-full items-center justify-between gap-4">
           {/* Search Bar - Pill Shape */}
           <div className="relative w-full md:w-80">
-            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-black/50">
+            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#007ACC]/50">
               <SearchIcon />
             </div>
             <input
-              className="w-full bg-white border-2 border-black rounded-full py-2.5 pl-11 pr-5 text-black placeholder:text-black/40 text-sm font-bold focus:outline-none focus:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.1)] transition-all duration-200"
+              className="w-full bg-white border-2 border-[#007ACC] rounded-full py-2.5 pl-11 pr-5 text-[#007ACC] placeholder:text-[#007ACC]/40 text-sm font-bold focus:outline-none focus:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.1)] transition-all duration-200"
               placeholder="Cari Produk..."
               type="text"
               value={searchQuery}
@@ -105,9 +105,9 @@ const Products = () => {
           <button
             className="
               flex items-center justify-center gap-2 whitespace-nowrap 
-              rounded-full bg-black px-6 py-2.5 
+              rounded-full bg-[#007ACC] px-6 py-2.5 
               text-sm font-black text-white uppercase tracking-wider
-              border-2 border-black
+              border-2 border-[#007ACC]
               shadow-[4px_4px_0px_0px_rgba(0,0,0,0.2)]
               hover:shadow-none hover:translate-y-0.5
               active:scale-95
@@ -131,7 +131,7 @@ const Products = () => {
       </div>
 
       {/* Table Container - Neo Brutalist Border/Shadow */}
-      <div className="overflow-hidden rounded-xl border-2 border-black bg-white flex-1 flex flex-col shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
+      <div className="overflow-hidden rounded-xl border-2 border-[#007ACC] bg-white flex-1 flex flex-col shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
         <div className="overflow-x-auto flex-1">
           <ProductTable
             products={filteredItems}
@@ -146,22 +146,22 @@ const Products = () => {
 
         {/* 3. PAGINATION CONTROLS */}
         {!isProductLoading && totalPages > 1 && (
-          <div className="flex justify-center items-center gap-4 py-4 px-4 border-t-2 border-black bg-gray-50">
+          <div className="flex justify-center items-center gap-4 py-4 px-4 border-t-2 border-[#007ACC] bg-gray-50">
             <button
               onClick={() => handlePageChange(currentPage - 1)}
               disabled={currentPage === 1}
               className="
                 px-4 py-2 rounded-lg 
                 text-xs font-bold uppercase tracking-wider
-                border-2 border-black bg-white text-black
-                hover:bg-black hover:text-white
-                disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-black
+                border-2 border-[#007ACC] bg-white text-[#007ACC]
+                hover:bg-[#007ACC] hover:text-white
+                disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-[#007ACC]
                 transition-all duration-200
               "
             >
               Kembali
             </button>
-            <span className="text-black font-bold text-sm">
+            <span className="text-[#007ACC] font-bold text-sm">
               Hal {currentPage} dari {totalPages}
             </span>
             <button
@@ -170,9 +170,9 @@ const Products = () => {
               className="
                 px-4 py-2 rounded-lg 
                 text-xs font-bold uppercase tracking-wider
-                border-2 border-black bg-white text-black
-                hover:bg-black hover:text-white
-                disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-black
+                border-2 border-[#007ACC] bg-white text-[#007ACC]
+                hover:bg-[#007ACC] hover:text-white
+                disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-[#007ACC]
                 transition-all duration-200
               "
             >

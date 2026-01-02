@@ -22,7 +22,7 @@ const ProductTable = ({ products, isLoading, isError, onDelete }: props) => {
       <div className="w-full bg-white">
         <div className="w-full min-h-80 flex flex-col gap-4 justify-center items-center">
           {isError ? <WarningIcon /> : <Loader size="md" variant="dark" />}
-          <p className="text-black font-bold uppercase tracking-wider">
+          <p className="text-[#007ACC] font-bold uppercase tracking-wider">
             {isError ? "Gagal Memuat Data" : "Memuat Data Produk..."}
           </p>
         </div>
@@ -34,7 +34,7 @@ const ProductTable = ({ products, isLoading, isError, onDelete }: props) => {
     return (
       <div className="w-full bg-white">
         <div className="w-full min-h-80 flex flex-col gap-2 justify-center items-center">
-          <p className="text-black font-black uppercase tracking-widest text-lg">
+          <p className="text-[#007ACC] font-black uppercase tracking-widest text-lg">
             Tidak Ada Produk
           </p>
         </div>
@@ -43,8 +43,8 @@ const ProductTable = ({ products, isLoading, isError, onDelete }: props) => {
 
   return (
     <table className="w-full text-left border-collapse">
-      {/* Header: Solid Black for High Contrast */}
-      <thead className="bg-black text-white">
+      {/* Header: Solid [#007ACC] for High Contrast */}
+      <thead className="bg-[#007ACC] text-white">
         <tr>
           <th className="py-4 px-4 text-xs font-black uppercase tracking-widest">
             # ID
@@ -70,18 +70,18 @@ const ProductTable = ({ products, isLoading, isError, onDelete }: props) => {
         </tr>
       </thead>
 
-      {/* Body: White Background, Black Text */}
-      <tbody className="bg-white text-black">
+      {/* Body: White Background, [#007ACC] Text */}
+      <tbody className="bg-white text-[#007ACC]">
         {products.map((product: Product) => (
           <tr
             key={product.id}
-            className="border-b border-black/10 hover:bg-gray-50 transition-colors"
+            className="border-b border-[#007ACC]/10 hover:bg-gray-50 transition-colors"
           >
-            <td className="p-4 text-sm font-medium text-black/60">
+            <td className="p-4 text-sm font-medium text-[#007ACC]/60">
               #{product.id}
             </td>
             <td className="p-4">
-              <div className="h-12 w-12 rounded-lg border border-black p-0.5 bg-white">
+              <div className="h-12 w-12 rounded-lg border border-[#007ACC] p-0.5 bg-white">
                 <img
                   className="h-full w-full rounded-md object-cover"
                   src={product.image as string}
@@ -89,13 +89,13 @@ const ProductTable = ({ products, isLoading, isError, onDelete }: props) => {
                 />
               </div>
             </td>
-            <td className="p-4 text-sm font-bold uppercase text-black">
+            <td className="p-4 text-sm font-bold uppercase text-[#007ACC]">
               {product.name}
             </td>
-            <td className="p-4 text-sm font-black text-right text-black">
+            <td className="p-4 text-sm font-black text-right text-[#007ACC]">
               {formatCurrency(product.price)}
             </td>
-            <td className="p-4 text-sm font-medium text-right text-black">
+            <td className="p-4 text-sm font-medium text-right text-[#007ACC]">
               {product.stock}
             </td>
             <td className="p-4 text-center">
@@ -107,8 +107,8 @@ const ProductTable = ({ products, isLoading, isError, onDelete }: props) => {
                 <button
                   className="
                     flex items-center justify-center h-8 w-8 rounded-full 
-                    border border-black text-black 
-                    hover:bg-black hover:text-white 
+                    border border-[#007ACC] text-[#007ACC] 
+                    hover:bg-[#007ACC] hover:text-white 
                     transition-all duration-200
                   "
                   disabled={isLoading}
@@ -122,8 +122,8 @@ const ProductTable = ({ products, isLoading, isError, onDelete }: props) => {
                 <button
                   className="
                     flex items-center justify-center h-8 w-8 rounded-full 
-                    border border-black text-black 
-                    hover:bg-black hover:text-white 
+                    border border-[#007ACC] text-[#007ACC] 
+                    hover:bg-[#007ACC] hover:text-white 
                     transition-all duration-200
                   "
                   disabled={isLoading}

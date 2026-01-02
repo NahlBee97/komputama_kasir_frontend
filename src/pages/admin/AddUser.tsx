@@ -39,9 +39,9 @@ const AddUser = () => {
 
   // --- Shared B&W Styles ---
   const inputClass =
-    "flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-black py-2 focus:outline-0 border-2 border-black bg-white h-14 placeholder:text-black/30 px-4 text-base font-bold transition-all duration-200 focus:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]";
+    "flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#007ACC] py-2 focus:outline-0 border-2 border-[#007ACC] bg-white h-14 placeholder:text-[#007ACC]/30 px-4 text-base font-bold transition-all duration-200 focus:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]";
   const labelClass =
-    "text-black text-sm font-black uppercase tracking-wide pb-2";
+    "text-[#007ACC] text-sm font-black uppercase tracking-wide pb-2";
   const errorClass = "text-red-600 text-xs font-bold mt-1 uppercase";
 
   return (
@@ -50,12 +50,12 @@ const AddUser = () => {
       <div className="flex justify-center">
         {/* Card Container */}
         <div
-          className="w-full max-w-2xl bg-white border-2 border-black rounded-xl p-8"
+          className="w-full max-w-2xl bg-white border-2 border-[#007ACC] rounded-xl p-8"
           style={{ boxShadow: "8px 8px 0px 0px rgba(0,0,0,1)" }}
         >
           {/* Header */}
-          <div className="mb-8 border-b-2 border-black pb-6">
-            <h1 className="text-black text-4xl font-black leading-tight tracking-tighter uppercase">
+          <div className="mb-8 border-b-2 border-[#007ACC] pb-6">
+            <h1 className="text-[#007ACC] text-4xl font-black leading-tight tracking-tighter uppercase">
               Tambah Petugas
             </h1>
           </div>
@@ -115,7 +115,7 @@ const AddUser = () => {
                       ))}
                     </select>
                     {/* Custom Arrow */}
-                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-black">
+                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-[#007ACC]">
                       <ExpandMoreIcon />
                     </div>
                   </div>
@@ -127,15 +127,15 @@ const AddUser = () => {
             </div>
 
             {/* Action Buttons */}
-            <div className="mt-10 flex flex-wrap justify-end gap-4 border-t-2 border-black pt-6">
+            <div className="mt-10 flex flex-wrap justify-end gap-4 border-t-2 border-[#007ACC] pt-6">
               <button
                 type="button"
                 className="
                     flex h-12 min-w-32 cursor-pointer items-center justify-center 
                     rounded-lg bg-white px-6 py-2 
-                    text-base font-black uppercase tracking-wider text-black 
-                    border-2 border-black
-                    hover:bg-black hover:text-white 
+                    text-base font-black uppercase tracking-wider text-[#007ACC] 
+                    border-2 border-[#007ACC]
+                    hover:bg-[#007ACC] hover:text-white 
                     transition-all duration-200
                   "
                 onClick={() => navigate("/admin/users")}
@@ -148,9 +148,9 @@ const AddUser = () => {
                 disabled={formik.isSubmitting || isAddPending}
                 className="
                     flex h-12 min-w-32 cursor-pointer items-center justify-center 
-                    rounded-lg bg-black px-6 py-2 
+                    rounded-lg bg-[#007ACC] px-6 py-2 
                     text-base font-black uppercase tracking-wider text-white
-                    border-2 border-black
+                    border-2 border-[#007ACC]
                     shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]
                     hover:shadow-none hover:translate-y-0.5 hover:translate-x-0.5
                     disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none

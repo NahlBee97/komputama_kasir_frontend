@@ -18,17 +18,17 @@ const OrderDetailsModal = ({ isOpen, order, onClose }: props) => {
       <div
         className="
             flex flex-col w-full max-w-md 
-            bg-white rounded-xl border-2 border-black 
+            bg-white rounded-xl border-2 border-[#007ACC] 
             shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]
             overflow-hidden
         "
       >
         {/* Header */}
-        <div className="p-6 border-b-2 border-black bg-gray-50">
-          <p className="text-4xl font-black leading-none tracking-tighter text-black uppercase">
+        <div className="p-6 border-b-2 border-[#007ACC] bg-gray-50">
+          <p className="text-4xl font-black leading-none tracking-tighter text-[#007ACC] uppercase">
             Order #{order.id}
           </p>
-          <p className="mt-2 font-bold text-black/50 uppercase tracking-wide text-sm">
+          <p className="mt-2 font-bold text-[#007ACC]/50 uppercase tracking-wide text-sm">
             {format(order.createdAt, "dd MMMM yyyy • HH:mm")}
           </p>
         </div>
@@ -41,14 +41,14 @@ const OrderDetailsModal = ({ isOpen, order, onClose }: props) => {
               className="flex justify-between items-start gap-x-4"
             >
               <div className="flex flex-col">
-                <p className="text-black text-sm font-bold uppercase">
+                <p className="text-[#007ACC] text-sm font-bold uppercase">
                   {item.product?.name}
                 </p>
-                <p className="text-black/50 text-xs font-bold">
+                <p className="text-[#007ACC]/50 text-xs font-bold">
                   Qty: {item.quantity}
                 </p>
               </div>
-              <p className="text-black text-sm font-black text-right">
+              <p className="text-[#007ACC] text-sm font-black text-right">
                 {formatCurrency(item.product?.price as number)}
               </p>
             </div>
@@ -57,16 +57,16 @@ const OrderDetailsModal = ({ isOpen, order, onClose }: props) => {
 
         {/* Receipt Divider (Dashed) */}
         <div className="px-6">
-          <hr className="border-t-2 border-dashed border-black/20" />
+          <hr className="border-t-2 border-dashed border-[#007ACC]/20" />
         </div>
 
         {/* Total Section */}
         <div className="p-6">
           <div className="flex justify-between items-end gap-x-6">
-            <p className="text-xl font-black leading-none text-black tracking-tight">
+            <p className="text-xl font-black leading-none text-[#007ACC] tracking-tight">
               TOTAL
             </p>
-            <p className="text-4xl font-black leading-none text-right text-black tracking-tighter">
+            <p className="text-4xl font-black leading-none text-right text-[#007ACC] tracking-tighter">
               {formatCurrency(order.totalAmount)}
             </p>
           </div>
@@ -79,9 +79,9 @@ const OrderDetailsModal = ({ isOpen, order, onClose }: props) => {
             className="
                 w-full cursor-pointer items-center justify-center 
                 rounded-lg h-12 px-5 
-                border-2 border-black bg-white 
-                text-base font-black uppercase tracking-widest text-black
-                hover:bg-black hover:text-white 
+                border-2 border-[#007ACC] bg-white 
+                text-base font-black uppercase tracking-widest text-[#007ACC]
+                hover:bg-[#007ACC] hover:text-white 
                 active:scale-95
                 transition-all duration-200
             "

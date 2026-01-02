@@ -11,10 +11,10 @@ export const KeypadButton = ({
     onClick={onClick}
     className="
       flex items-center justify-center h-16 w-full rounded-xl 
-      text-2xl font-black 
-      border-2 border-black bg-white text-black 
+      text-2xl font-black
+      border-2 border-[#007ACC] bg-white text-[#007ACC] 
       transition-all duration-200 
-      hover:bg-black hover:text-white 
+      hover:bg-[#007ACC] hover:text-white 
       active:scale-95
     "
   >

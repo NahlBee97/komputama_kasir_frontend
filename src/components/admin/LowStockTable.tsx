@@ -20,7 +20,7 @@ const LowStockTable = ({ products, isLoading, isError }: props) => {
           ) : (
             <Loader size="md" variant="dark" />
           )}
-          <p className="text-black font-bold uppercase tracking-wider">
+          <p className="text-[#007ACC] font-bold uppercase tracking-wider">
             {isError ? "Gagal Memuat Data" : "Memuat Data Produk..."}
           </p>
         </div>
@@ -32,14 +32,14 @@ const LowStockTable = ({ products, isLoading, isError }: props) => {
     return (
       <div className="w-full bg-white">
         <div className="w-full min-h-80 flex flex-col gap-2 justify-center items-center">
-          <div className="rounded-full bg-black/5 p-4">
+          <div className="rounded-full bg-[#007ACC]/5 p-4">
             {/* Checkmark or similar could go here, simply text for now */}
             <span className="text-2xl">👍</span>
           </div>
-          <p className="text-black font-black uppercase tracking-widest text-lg">
+          <p className="text-[#007ACC] font-black uppercase tracking-widest text-lg">
             Semua Stok Aman
           </p>
-          <p className="text-black/50 text-sm font-medium">
+          <p className="text-[#007ACC]/50 text-sm font-medium">
             Tidak ada produk dengan stok rendah.
           </p>
         </div>
@@ -51,8 +51,8 @@ const LowStockTable = ({ products, isLoading, isError }: props) => {
     <div className="w-full bg-white">
       <div className="overflow-x-auto">
         <table className="w-full text-left border-collapse">
-          {/* Header: Solid Black for High Contrast */}
-          <thead className="bg-black text-white">
+          {/* Header: Solid [#007ACC] for High Contrast */}
+          <thead className="bg-[#007ACC] text-white">
             <tr>
               <th className="p-4 text-xs font-black uppercase tracking-widest">
                 Id #
@@ -70,19 +70,19 @@ const LowStockTable = ({ products, isLoading, isError }: props) => {
           </thead>
 
           {/* Body */}
-          <tbody className="text-black">
+          <tbody className="text-[#007ACC]">
             {products.map((product: Product) => (
               <tr
                 key={product.id}
-                className="border-b border-black/10 hover:bg-gray-50 transition-colors"
+                className="border-b border-[#007ACC]/10 hover:bg-gray-50 transition-colors"
               >
-                <td className="p-4 text-sm font-medium text-black/60">
+                <td className="p-4 text-sm font-medium text-[#007ACC]/60">
                   #{product.id}
                 </td>
-                <td className="p-4 text-sm font-bold text-black uppercase">
+                <td className="p-4 text-sm font-bold text-[#007ACC] uppercase">
                   {product.name}
                 </td>
-                <td className="p-4 text-sm font-black text-center text-black">
+                <td className="p-4 text-sm font-black text-center text-[#007ACC]">
                   {product.stock}
                 </td>
                 <td className="p-4 text-sm text-center">

@@ -79,16 +79,16 @@ const Report = () => {
 
   // Shared input class for consistency
   const inputClass =
-    "h-12 w-full appearance-none rounded-lg border-2 border-black bg-white px-4 text-sm font-bold text-black placeholder-black/30 outline-none focus:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all duration-200";
+    "h-12 w-full appearance-none rounded-lg border-2 border-[#007ACC] bg-white px-4 text-sm font-bold text-[#007ACC] placeholder-[#007ACC]/30 outline-none focus:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all duration-200";
   const labelClass =
-    "absolute -top-2.5 left-3 bg-white px-1 text-xs font-black uppercase tracking-widest text-black";
+    "absolute -top-2.5 left-3 bg-white px-1 text-xs font-black uppercase tracking-widest text-[#007ACC]";
 
   return (
-    // Main Container: White bg, Black text
-    <main className="flex flex-1 flex-col bg-white text-black min-h-full p-6 lg:p-10">
+    // Main Container: White bg, [#007ACC] text
+    <main className="flex flex-1 flex-col bg-white text-[#007ACC] min-h-full p-6 lg:p-10">
       <div className="layout-content-container flex flex-col w-full max-w-7xl mx-auto flex-1 h-full">
         {/* Header Section */}
-        <div className="flex flex-col items-start justify-between gap-8 mb-10 border-b-2 border-black pb-8">
+        <div className="flex flex-col items-start justify-between gap-8 mb-10 border-b-2 border-[#007ACC] pb-8">
           <h1 className="text-4xl sm:text-5xl font-black leading-tight tracking-tighter uppercase">
             Laporan Penjualan
           </h1>
@@ -141,7 +141,7 @@ const Report = () => {
                   ))}
                 </select>
                 {/* Custom Chevron */}
-                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-black">
+                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-[#007ACC]">
                   <svg
                     className="h-4 w-4"
                     fill="none"
@@ -197,13 +197,13 @@ const Report = () => {
 
         {/* Top Selling Products Table */}
         <div className="mt-12">
-          <h2 className="mb-6 flex items-center gap-3 text-2xl font-black uppercase tracking-tight text-black">
-            <span className="h-3 w-3 rounded-full bg-black"></span>
+          <h2 className="mb-6 flex items-center gap-3 text-2xl font-black uppercase tracking-tight text-[#007ACC]">
+            <span className="h-3 w-3 rounded-full bg-[#007ACC]"></span>
             Produk Terlaris
           </h2>
 
           {/* Table Container with Neo-Brutalist styling */}
-          <div className="overflow-hidden rounded-xl border-2 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
+          <div className="overflow-hidden rounded-xl border-2 border-[#007ACC] shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
             <TopSelling
               products={topProducts}
               isLoading={isTopProductsLoading}

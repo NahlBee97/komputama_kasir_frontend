@@ -17,7 +17,7 @@ const ProductCard = ({ item, onClick, disabled }: ProductCardProps) => {
       disabled={disabled || isOutOfStock}
       className={`
         group relative flex flex-col aspect-square w-full overflow-hidden 
-        rounded-2xl border border-black bg-white text-left
+        rounded-2xl border border-[#007ACC] bg-white text-left
         transition-all duration-200 ease-out
         ${
           disabled || isOutOfStock
@@ -27,7 +27,7 @@ const ProductCard = ({ item, onClick, disabled }: ProductCardProps) => {
       `}
     >
       {/* Image Container - Added 'relative' here to position the badge */}
-      <div className="relative flex-1 w-full overflow-hidden border-b border-black bg-gray-50">
+      <div className="relative flex-1 w-full overflow-hidden border-b border-[#007ACC] bg-gray-50">
         <div
           className="h-full w-full bg-cover bg-center transition-transform duration-500 ease-out group-hover:scale-110"
           style={{
@@ -38,7 +38,7 @@ const ProductCard = ({ item, onClick, disabled }: ProductCardProps) => {
         {/* Out of Stock Overlay */}
         {isOutOfStock && (
           <div className="absolute inset-0 flex items-center justify-center bg-white/30 backdrop-blur-[1px]">
-            <span className="rotate-6 rounded border border-black bg-black px-3 py-1 text-xs font-black uppercase tracking-widest text-white shadow-sm">
+            <span className="rotate-6 rounded border border-[#007ACC] bg-[#007ACC] px-3 py-1 text-xs font-black uppercase tracking-widest text-white shadow-sm">
               Stok Habis
             </span>
           </div>
@@ -47,11 +47,11 @@ const ProductCard = ({ item, onClick, disabled }: ProductCardProps) => {
 
       {/* Content Container */}
       <div className="flex w-full flex-col justify-center bg-white px-4 py-3">
-        <p className="line-clamp-2 w-full text-xs font-bold tracking-tight text-gray-500 transition-colors group-hover:text-black">
+        <p className="line-clamp-2 w-full text-xs font-bold tracking-tight text-gray-500 transition-colors group-hover:text-[#007ACC]">
           {item.name}
         </p>
         <div className="flex justify-between items-center">
-          <p className="mt-0.5 text-base font-black text-black">
+          <p className="mt-0.5 text-base font-black text-[#007ACC]">
             {formatCurrency(item.price)}
           </p>
           <p className="text-xs text-gray-500">Stok: {item.stock}</p>

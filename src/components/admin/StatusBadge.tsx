@@ -4,13 +4,13 @@ const StatusBadge = ({ stock }: { stock: number }) => {
 
   
   if (stock > 10) {
-    styles = "bg-black text-white border-2 border-black";
+    styles = "bg-[#007ACC] text-white border-2 border-[#007ACC]";
     status = "Cukup";
   } else if (stock > 0 && stock <= 10) {
-    styles = "bg-white text-black border-2 border-black";
+    styles = "bg-white text-[#007ACC] border-2 border-[#007ACC]";
     status = "Rendah";
   } else {
-    styles ="bg-white text-black border-2 border-dashed border-black opacity-60";
+    styles ="bg-white text-[#007ACC] border-2 border-dashed border-[#007ACC] opacity-60";
     status = "Habis";
   }
 
